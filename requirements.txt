@@ -1,0 +1,22 @@
+# Application/pipeline environment. Keep the model-serving vLLM environment
+# separate because its exact PyTorch/CUDA build is hardware dependent.
+numpy>=1.26
+pandas>=2.2
+openpyxl>=3.0.10
+Pillow>=10.0
+pydicom>=2.4,<4
+PyYAML>=6.0
+pydantic>=2.10
+openai>=1.70
+tqdm>=4.66
+faiss-cpu>=1.9
+torch>=2.5
+transformers>=4.57.0
+accelerate>=1.2
+huggingface_hub>=0.32
+pytest>=8.3
+
+# Server environment only when running Llama 70B in-flight 4-bit:
+# bitsandbytes>=0.46.1
+sentencepiece>=0.2
+protobuf>=4.25,<6

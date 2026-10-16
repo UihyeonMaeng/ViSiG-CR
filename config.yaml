@@ -1,0 +1,577 @@
+project:
+  name: ViSiG-CR
+  version: "2.0.0"
+  paper_title: Semantically Contrastive Retrieval in Relation-Annotated Visual Case Graphs for Medical VQA Reasoning
+  seed: 42
+  ontology_path: ontology.yaml
+
+# The checked-in defaults follow the current container layout:
+#   repository: /workspace/visig_cr
+#   restricted CXR sources: /workspace/Datasets/06.CXR
+#   generated artifacts: /workspace/visig_cr/work
+paths:
+  repository_root: /workspace/visig_cr
+  scripts_root: /workspace/visig_cr/scripts
+  dataset_root: /workspace/Datasets/06.CXR
+
+  # MIMIC-CXR-JPG 2.1.0. The full image tree is downloaded separately into
+  # mimic_jpg_root; download_physionet_benchmarks.sh downloads metadata plus a
+  # ten-image smoke subset only.
+  mimic_jpg_root: /workspace/Datasets/06.CXR/mimic-cxr-jpg/2.1.0
+  mimic_image_filenames: /workspace/Datasets/06.CXR/mimic-cxr-jpg/2.1.0/IMAGE_FILENAMES
+  mimic_metadata_csv: /workspace/Datasets/06.CXR/mimic-cxr-jpg/2.1.0/mimic-cxr-2.0.0-metadata.csv.gz
+  mimic_split_csv: /workspace/Datasets/06.CXR/mimic-cxr-jpg/2.1.0/mimic-cxr-2.0.0-split.csv.gz
+  mimic_chexpert_csv: /workspace/Datasets/06.CXR/mimic-cxr-jpg/2.1.0/mimic-cxr-2.0.0-chexpert.csv.gz
+  mimic_negbio_csv: /workspace/Datasets/06.CXR/mimic-cxr-jpg/2.1.0/mimic-cxr-2.0.0-negbio.csv.gz
+  mimic_test_labels_csv: /workspace/Datasets/06.CXR/mimic-cxr-jpg/2.1.0/mimic-cxr-2.1.0-test-set-labeled.csv
+
+  # MIMIC-CXR reports and mapping files.
+  mimic_report_root: /workspace/Datasets/06.CXR/mimic-cxr/2.1.0
+  mimic_record_list_csv: /workspace/Datasets/06.CXR/mimic-cxr/2.1.0/cxr-record-list.csv.gz
+  mimic_study_list_csv: /workspace/Datasets/06.CXR/mimic-cxr/2.1.0/cxr-study-list.csv.gz
+  mimic_provider_list_csv: /workspace/Datasets/06.CXR/mimic-cxr/2.1.0/cxr-provider-list.csv.gz
+
+  # Auxiliary MIMIC-derived audit/reference resources.
+  chest_imagenome_root: /workspace/Datasets/06.CXR/chest-imagenome/1.0.0
+  chest_imagenome_scene_graph_zip: /workspace/Datasets/06.CXR/chest-imagenome/1.0.0/silver_dataset/scene_graph.zip
+  radgraph_root: /workspace/Datasets/06.CXR/radgraph/1.0.0
+  ms_cxr_root: /workspace/Datasets/06.CXR/ms-cxr/1.1.0
+  ms_cxr_json: /workspace/Datasets/06.CXR/ms-cxr/1.1.0/MS_CXR_Local_Alignment_v1.1.0.json
+  ms_cxr_csv: /workspace/Datasets/06.CXR/ms-cxr/1.1.0/MS_CXR_Local_Alignment_v1.1.0.csv
+  ms_cxr_converter: /workspace/Datasets/06.CXR/ms-cxr/1.1.0/convert_coco_json_to_csv.py
+
+  # Existing external datasets. Set these to the already-preprocessed ReX paths
+  # in the local environment when switching the memory/query corpus.
+  rexgradient_root: /workspace/visig_cr/work/datasets/rex/ReXGradient-160K
+  rexvqa_root: /workspace/visig_cr/work/datasets/rex/ReXVQA
+  chexpert_plus_root: /workspace/visig_cr/data/external/chexpert-plus
+
+  # VQA benchmark sources. MIMIC-derived VQA is joined only to the held-out
+  # query case pool created by ``prepare_datasets.py mimic-roles``.
+  mimic_vqa_evaluation_root: /workspace/Datasets/06.CXR/vqa-evaluation-mimic-cxr/1.0.0
+  medical_cxr_vqa_root: /workspace/Datasets/06.CXR/medical-cxr-vqa-dataset/1.0.0
+
+  vindr_cxr_raw_root: /workspace/Datasets/06.CXR/vindr-cxr/1.0.0
+  vindr_cxr_vqa_root: /workspace/Datasets/06.CXR/vindr-cxr-vqa/data_v1.json
+  # DICOM-derived image bytes stay beside the restricted raw dataset.  ViSiG-CR
+  # work artifacts contain absolute references only.
+  vindr_cxr_png_root: /workspace/Datasets/06.CXR/vindr-cxr/1.0.0/png
+  # Backward-compatible alias used only when an older caller requests it.
+  vindr_cxr_image_root: /workspace/Datasets/06.CXR/vindr-cxr/1.0.0/png
+  vindr_cxr_preprocessed_root: /workspace/visig_cr/work/datasets/vindr/vindr-cxr
+  vindr_cxr_images_jsonl: /workspace/visig_cr/work/datasets/vindr/vindr-cxr/images.jsonl
+
+  rad_restruct_root: /workspace/Datasets/06.CXR/rad-restruct
+  iu_xray_image_root: /workspace/Datasets/06.CXR/iu-xray/images
+
+  work_root: /workspace/visig_cr/work
+  physionet_preprocessed_root: /workspace/visig_cr/work/datasets/physionet
+  master_cases_jsonl: /workspace/visig_cr/work/datasets/physionet/mimic-cxr/cases.jsonl
+  # Legacy/default active manifest. Protocol-aware commands override this with
+  # memory_<N>/cases.jsonl without changing the immutable master manifest.
+  cases_jsonl: /workspace/visig_cr/work/datasets/physionet/mimic-cxr/cases.jsonl
+  protocol_root: /workspace/visig_cr/work/protocols
+  mimic_chexpert_labels_jsonl: /workspace/visig_cr/work/datasets/physionet/mimic-cxr/labels/chexpert.jsonl
+  mimic_negbio_labels_jsonl: /workspace/visig_cr/work/datasets/physionet/mimic-cxr/labels/negbio.jsonl
+  radgraph_preprocessed_jsonl: /workspace/visig_cr/work/datasets/physionet/radgraph/report_graphs.jsonl
+  chest_imagenome_preprocessed_jsonl: /workspace/visig_cr/work/datasets/physionet/chest-imagenome/scene_graphs.jsonl
+  ms_cxr_preprocessed_jsonl: /workspace/visig_cr/work/datasets/physionet/ms-cxr/grounding_annotations.jsonl
+  dataset_validation_json: /workspace/visig_cr/work/datasets/physionet/validation.json
+
+  events_jsonl: /workspace/visig_cr/work/ontology/events.jsonl
+  extraction_status_jsonl: /workspace/visig_cr/work/ontology/extraction_status.jsonl
+  visual_dir: /workspace/visig_cr/work/visual
+  graph_db: /workspace/visig_cr/work/graph/visual_case_graph.sqlite
+  results_dir: /workspace/visig_cr/work/results
+  ontology_reference_annotations_jsonl: /workspace/visig_cr/work/audits/ontology_reference_annotations.jsonl
+  attribute_selector_reference_annotations_jsonl: /workspace/visig_cr/work/audits/attribute_selector_reference_annotations.jsonl
+  retrieval_reference_annotations_jsonl: /workspace/visig_cr/work/audits/retrieval_reference_annotations.jsonl
+  semantic_contrast_group_reference_annotations_jsonl: /workspace/visig_cr/work/audits/semantic_contrast_group_reference_annotations.jsonl
+  comparison_results_dir: /workspace/visig_cr/work/results/comparisons
+
+models:
+  medsiglip_path: /workspace/visig_cr/models/google/medsiglip-448
+  ontology_extractor_llm:
+    base_url: http://127.0.0.1:8001/v1
+    api_key: EMPTY
+    model: ontology-extractor
+    # Must match the server selected in model.sh. Override with
+    # extract-ontology --ontology-backend for qwen-vl30/llama alternatives.
+    backend: qwen-vl8
+    model_family: qwen
+    # 57 finding IDs remain available, but the compact prompt plus a 16-event
+    # post-validation cap still needs more than the old 1,200-token ceiling for
+    # dense reports. Llama-70B can also have longer first-token latency.
+    timeout_seconds: 180
+    # Transport/API retry only. JSON/semantic validation retries are configured
+    # separately under ontology_extraction.
+    max_retries: 2
+    max_tokens: 2400
+    temperature: 0.0
+    disable_qwen_thinking: true
+  attribute_selector_llm:
+    # Main ViSiG-CR query interpretation path. model.sh serves Qwen3-VL-8B
+    # by default under the stable API identity `attribute-selector`; 30B is an
+    # explicit sensitivity option and does not require a config change.
+    enabled: true
+    base_url: http://127.0.0.1:8002/v1
+    api_key: EMPTY
+    model: attribute-selector
+    backend: qwen-vl8
+    model_family: qwen
+    timeout_seconds: 120
+    max_retries: 2
+    max_tokens: 1000
+    temperature: 0.0
+    disable_qwen_thinking: true
+    allow_unconstrained_json_fallback: false
+  reader_vlm:
+    base_url: http://127.0.0.1:8002/v1
+    api_key: EMPTY
+    model: frozen-reader
+    timeout_seconds: 120
+    max_tokens: 1200
+    temperature: 0.0
+    disable_qwen_thinking: true
+    image_max_side: 1024
+    jpeg_quality: 95
+    max_retries: 0
+
+ontology_extraction:
+  # The model still has access to all 57 extractable finding IDs, but the v3
+  # contract uses one sparse event array instead of 57 finding-keyed response
+  # properties. Runtime validation requires direct/curated semantic support and
+  # deterministically recovers explicitly named assertions omitted by the model.
+  max_events_per_case: 16
+  event_cap_policy: clinical_priority
+  # Deterministic case-level fallback for broad questions such as
+  # "Is there evidence of any abnormality?".  This is computed only from
+  # already validated ontology events; it does not add another LLM target.
+  case_normality:
+    enabled: true
+    # "clinical" = every extractable finding with retrieval_policy=clinical.
+    # Replace with an explicit list of canonical finding IDs for a narrower
+    # benchmark-specific abnormality definition.
+    abnormal_findings: clinical
+  prompt_vocabulary_mode: minimal_v3_sparse
+  selection_strategy: evidence_first
+  context_only_direct_mention_only: true
+  forbid_family_expansion: true
+  emit_empty_finding_arrays: false
+  # These broad concepts are fallback IDs, not automatic parents of a more
+  # specific finding. They may be emitted only when the report itself uses the
+  # corresponding generic wording. If a span explicitly contains both a generic
+  # and a specific concept, both remain allowed.
+  generic_fallback_finding_ids:
+    - lung_opacity
+    - increased_density
+    - infiltrate
+    - alveolar_pattern
+    - chronic_lung_change
+    - lung_lesion
+    - support_device
+  max_finding_synonyms_per_concept: 6
+  max_anatomy_synonyms_per_concept: 4
+  retry_on_length: true
+  prompt_current_sections_only: true
+  # Some MIMIC reports contain a metadata header (commonly COMPARISON) followed
+  # by a blank line and then unlabeled current-study narrative. Recover only
+  # that trailing narrative as an implicit FINDINGS span; never fall back to the
+  # whole labeled report.
+  implicit_current_section_fallback: true
+  implicit_current_section_min_words: 5
+  # Preserve raw reports for evidence provenance, but present logical whitespace
+  # to the ontology LLM so physical MIMIC line wrapping cannot reset negation or
+  # other assertion scope. Runtime evidence is aligned back to raw offsets.
+  text_handling_policy: logical_whitespace_v1
+  prompt_logical_whitespace: true
+  allow_whitespace_equivalent_evidence: true
+  presence_validation_context: logical_clause_v1
+
+  allowed_splits: [train]
+  validation_retries: 1
+  record_raw_responses: true
+  record_parsed_responses: true
+  raw_response_max_chars: 20000
+  rejected_event_sample_limit: 20
+
+  include_sections: [findings, impression]
+  enforce_include_sections: true
+  reject_prior_only: true
+  require_exact_span: true
+  minimum_event_confidence: 0.70
+  semantic_validation:
+    enabled: true
+    reject_unsupported_events: true
+    recover_explicit_named_events: true
+    recover_context_only_findings: true
+    require_verified_marker_for_retrieval: true
+    max_distinct_findings_per_evidence_span: 6
+    reject_span_overexpansion: true
+  retrieval_eligible_absence_findings:
+    - pleural_effusion
+    - pneumothorax
+    - pulmonary_edema
+    - consolidation
+    - atelectasis
+    - cardiomegaly
+    - pneumonia
+    - lung_opacity
+    - lung_lesion
+    - fracture
+
+attribute_selector:
+  # Main method is LLM-primary. Rules are retained as deterministic
+  # post-generation validation/recovery and as an explicit ablation backend.
+  backend: llm
+  top_k_ontology: 3
+  validation_retries: 1
+  deterministic_fallback_on_validation_error: true
+  semantic_min_score: 0.10
+  semantic_template: A chest X-ray question about {label}.
+
+visual_index:
+  device: cuda:0
+  batch_size: 16
+  dtype: bfloat16
+  faiss_index: flat_ip
+  embedding_file: embeddings.f16.npy
+  case_ids_file: case_ids.json
+  index_file: medsiglip.index
+
+mimic_prepare:
+  frontal_views: [PA, AP]
+  view_priority: [PA, AP]
+  one_image_per_study: true
+  require_existing_files: true
+
+# Deterministic experiment-role protocol. Raw preprocessing is immutable;
+# ``mimic-roles`` creates the nested memory and fixed query manifests below
+# paths.protocol_root. Change counts and caps here, then rebuild the protocol.
+dataset_protocol:
+  protocol_id: mimic_split_42
+  activate_by_default: false
+  seed: 42
+  split_unit: subject
+  enforce_subject_disjoint: true
+  enforce_study_disjoint: true
+  enforce_image_disjoint: true
+
+  memory:
+    dataset: mimic_cxr
+    source_splits: [train]
+    nested_case_counts: [5000, 10000, 20000, 50000, 100000]
+    active_case_count: 100000
+    max_cases_per_subject: 3
+
+  # Disabled by default because official MIMIC validate/test patients provide
+  # the cleanest held-out in-domain query pool. Enable only when more query
+  # patients are required, and split by subject before any ontology extraction.
+  train_holdout:
+    enabled: false
+    subject_fraction: 0.10
+    subject_count: null
+
+  in_domain_queries:
+    mimic_case_pool:
+      source_splits: [validate, test]
+      max_cases: null
+    mimic_expert_vqa:
+      enabled: true
+      question_families: []
+      exclude_question_families: []
+      max_questions: null
+      max_questions_per_case: null
+    medical_cxr_vqa:
+      enabled: true
+      question_families: [presence, finding_identity, location, severity, type]
+      exclude_question_families: [view]
+      max_questions: 20000
+      max_questions_per_case: 6
+    # Evaluation-specific uncapped source view.  The raw Medical-CXR-VQA
+    # split is not used for protocol membership: rows are joined only to the
+    # patient-disjoint MIMIC validate/test query-case pool.  Source-family
+    # ``abnormality`` rows are retained only when their wording maps to the
+    # semantic presence family (e.g. "Is there evidence of any abnormality?").
+    medical_cxr_vqa_binary:
+      enabled: true
+      question_families: [presence]
+      source_question_families: [presence, abnormality]
+      exclude_question_families: [view]
+      max_questions: null
+      max_questions_per_case: null
+
+  external_queries:
+    rexvqa:
+      enabled: true
+      splits: [validate, test]
+    vindr_cxr_vqa:
+      enabled: true
+      semantic_only: true
+      # Current ViSiG-CR axes cover presence and finding identity. ``Where`` is
+      # reserved for the separate grounding protocol; ``How_many`` requires a
+      # count-aware ontology/retrieval/evaluation contract.
+      question_types: [Yes/No, Is there, What, Which]
+      max_questions: null
+      # The public data_v1.json schema contains no split field.  Because the
+      # ViSiG-CR external run does not train or tune on VinDr-CXR-VQA, the full
+      # released file is explicitly frozen as one external evaluation corpus.
+      # Manifests label this provenance and it must not be called an official test.
+      missing_split_policy: full_release_test
+    rad_restruct:
+      enabled: false
+      evaluation_mode: hierarchical_autoregressive
+      official_evaluator_required: true
+      max_reports: null
+
+visual_graph:
+  memory_split: train
+  candidate_pool: 96
+  k_min: 4
+  k_max: 16
+  min_similarity: 0.20
+  outlier_audit_similarity: 0.10
+  exclude_same_subject: true
+  commit_every_cases: 500
+
+# Every directed visual edge receives a question-independent bundle of
+# event-pair relations plus no_matched_events keyed by the two case IDs.
+relation_graph:
+  minimum_event_confidence: 0.70
+  # Until an independently audited event passes deterministic semantic support,
+  # it must not enter offline relation construction.
+  require_semantic_support: true
+  include_conditional_events: false
+  allow_same_anatomy_different_finding: true
+  minimum_event_relation_score: 0.35
+  clinical_far_relation_score: 0.25
+  unmatched_only_relation_score: 0.20
+  max_matches_per_event: 3
+  max_event_relations_per_edge: 64
+  commit_every_edges: 5000
+  event_relation_weights:
+    finding: 0.30
+    anatomy: 0.20
+    laterality: 0.12
+    presence: 0.16
+    severity: 0.10
+    uncertainty: 0.12
+
+retrieval:
+  # Blocks old/unverified ontology rows even when a legacy row happened to have
+  # retrieval_eligible=true.
+  require_semantic_support: true
+  # Preserve full-dataset completion when the LLM deliberately abstains or
+  # deterministic recovery cannot resolve a finding/attribute from visible
+  # query text. Infrastructure, transport, artifact, and image failures remain
+  # hard package issues and are never hidden by this fallback.
+  selector_fallback:
+    enabled: true
+    strategy: i2i
+    evidence_k: 6
+  k_seed: 8
+  # Shared maximum reference budget. ViSiG-CR may deliberately deliver fewer
+  # cases under the adaptive retrieval policy below; comparison methods retain
+  # their method-native K. Reader order, output contract, model, and decoding
+  # remain shared and are not changed by this policy.
+  evidence_k: 6
+  boundary_hops: 1
+  boundary_neighbors_per_hop: 12
+  relation_candidate_pool: 32
+  relation_neighbors_per_hop: 12
+  minimum_relation_route_score: 0.05
+  allow_visual_fallback_when_relations_missing: true
+  boundary_max_candidates_per_seed: 128
+  boundary_max_cases: 96
+  boundary_minimum_edge_similarity: -1.0
+  mutual_visual_first: true
+  hop_decay: 0.85
+  minimum_event_confidence: 0.70
+  minimum_target_match: 0.60
+  # Broad normality needs explicit any-abnormality scope. A no-acute descriptor
+  # is insufficient. Existing active positive events include stable/new/changed
+  # findings; lack of a scope-safe normal endpoint triggers exact No-RAG.
+  case_normality_reference_policy: explicit_event_supported
+  case_normality_abnormal_findings: clinical
+  # A future descriptor must declare normality_scope: any_abnormality in ontology.
+  # The current ontology has no such broad normal descriptor.
+  case_normality_explicit_normal_findings: []
+  # Existing broad fracture events can include fractured sternotomy wires.
+  # Exclude those from osseous-fracture exemplars unless the question names a
+  # wire/device; this is a retrieval-time compatibility filter only.
+  filter_device_fracture_events: true
+  tau_query: 0.20
+  tau_boundary: 0.20
+  hub_degree_scale: 32
+  visual_pool_size: 64
+  # Legacy graph policy only; the question-conditioned main method ignores it.
+  group_pair_mode: stored_edges
+  # Only visig_cr uses this strategy. Other methods and legacy graph controls
+  # retain their existing budgets, retrieval weights, reader and model settings.
+  visig_cr_strategy: question_conditioned
+  # Offline ontology-only sidecar, used exclusively by question-conditioned
+  # visig_cr. Run build-presence-index once per memory before new retrieval.
+  presence_index:
+    enabled: true
+    restore_pilot_absences: true
+    infer_from_normal_descriptors: true
+    # Default: <selected graph directory>/presence_index.npz
+    path: null
+  question_conditioned:
+    initial_pool_size: 64
+    max_pool_size: 512
+    pool_growth_factor: 2
+    candidates_per_value: 8
+    max_contrast_groups: 1
+    minimum_non_target_match: 0.60
+  group_candidates_per_value: 16
+  minimum_group_non_target_match: 0.60
+  minimum_group_visual_similarity: 0.20
+  minimum_group_quality: 0.05
+  # Legacy directional graph policy settings below. New main settings above
+  # independently enforce complete groups and never use these ranking bonuses.
+  # ViSiG-CR questions must deliver both required poles in the same
+  # reader-visible group. Optional values such as uncertain are never
+  # substituted for a missing required value.
+  require_complete_contrast_groups: true
+  # Stored relation edges remain the primary path. If they contain no complete
+  # pair despite both required values being present in the visual boundary,
+  # validate a small bounded cross-value pool using live event semantics.
+  candidate_pair_fallback:
+    enabled: true
+    candidates_per_value: 8
+    max_pair_checks: 64
+  # Prefer one compact, query-discriminative semantic contrast over filling the
+  # prompt with several weaker groups. These switches affect retrieval only.
+  max_contrast_groups: 1
+  fill_ungrouped_evidence: false
+  require_directional_group_agreement: true
+  # Keep the hard margin gate neutral until it is selected on validation. The
+  # directional score still ranks otherwise-valid groups below.
+  minimum_group_query_endpoint_margin: 0.0
+  candidate_weights:
+    lambda_query: 0.35
+    lambda_boundary: 0.20
+    lambda_target: 0.25
+    lambda_event: 0.20
+    lambda_relation: 0.20
+    lambda_hop: 0.05
+    lambda_hub: 0.03
+  set_weights:
+    lambda_coverage: 1.00
+    lambda_group: 0.60
+    lambda_candidate: 0.25
+    lambda_redundancy: 0.15
+    lambda_optional: 0.20
+    # abs(sim(query,left)-sim(query,right)) * validated pair quality
+    lambda_directional: 1.00
+    # A seed endpoint strengthens the visual locality of the pair, but never
+    # gives its present/absent value extra answer authority.
+    lambda_seed_anchor: 0.20
+
+reader:
+  order_seed: 42
+  # Retry only outputs that reached the model but violate JSON/schema/runtime
+  # validation. Transport/API failures are surfaced immediately.
+  validation_retries: 2
+  # LLaVA-Med uses an adaptive compact output contract for every condition:
+  # answer/confidence only for no-RAG; bounded numeric reference/group handles
+  # for comparison RAG and ViSiG-CR. Canonical audit fields are post-filled and
+  # explicitly marked as not_collected rather than requested from the model.
+  llava_med_output_mode: compact_adaptive
+  # Retry once only when the compact JSON or the finite answer contract is
+  # invalid. Binary answers are constrained to the yes/no enum at decode time.
+  llava_med_validation_retries: 1
+  llava_med_no_rag_max_tokens: 128
+  llava_med_rag_max_tokens: 256
+  llava_med_answer_representation: option_text
+  llava_med_collect_rationale: false
+  llava_med_raw_response_max_chars: 2000
+  # Query image + K=6 evidence images. The reader fails explicitly above this
+  # value; it never truncates a frozen package silently.
+  max_images_per_prompt: 7
+  # Preserve exact reader text and parsed JSON in prediction/issue audits.
+  # Set a positive maximum to truncate unusually long outputs, or false to
+  # omit raw text while retaining parsed output and validation errors.
+  record_raw_responses: true
+  raw_response_max_chars: 0
+  include_evidence_span: true
+  include_event_metadata: true
+  randomize_group_order: false
+  randomize_within_group: false
+  # Question-conditioned v2 only: deterministic query/group-specific balance.
+  # Use stored/reversed for a matched order ablation; baseline layout is unchanged.
+  question_conditioned_reference_order: balanced
+  randomize_ungrouped_order: false
+
+# Evaluation references are never imported by the retrieval runtime.
+evaluation:
+  ontology:
+    manual_audit_reports: 200-500 stratified reports
+    primary_metrics:
+      - event_f1
+      - evidence_span_precision
+      - anatomy_accuracy
+      - laterality_accuracy
+      - schema_validity
+  attribute_selector:
+    primary_metrics:
+      - target_attribute_accuracy
+      - target_finding_accuracy
+      - required_value_exact_match
+  retrieval:
+    k: 6
+    tau_query: 0.20
+    tau_non_target: 0.60
+    tau_group_visual: 0.20
+    primary_metrics:
+      - visual_preservation_at_k
+      - required_value_coverage_at_k
+      - semantic_contrast_completeness_at_k
+      - non_target_context_preservation_at_k
+      - delivered_semantic_contrast_validity
+      - semantic_group_co_presentation_rate
+      - attribute_value_redundancy_at_k
+      - relation_routed_evidence_fraction
+      - no_matched_event_use_rate
+      - relation_route_coverage
+  downstream:
+    primary_task: target_explicit_vqa
+    strict_query_reference_prediction_ids: true
+    missing_prediction_policy: fail
+    primary_question_families:
+      - presence
+      - negation_uncertainty
+      - location
+      - finding_identity
+    conditional_question_families:
+      - laterality
+      - severity
+    calibration_metrics: [ece, brier]
+    datasets:
+      rexvqa:
+        primary_metrics: [accuracy, question_family_accuracy, ece, brier]
+        diagnostic_metrics: [option_letter_macro_f1]
+      mimic_expert_vqa:
+        closed_metrics: [accuracy, ece, brier]
+        open_metrics: [normalized_exact_match, token_f1]
+      medical_cxr_vqa:
+        primary_metrics: [multi_answer_exact_match, multi_answer_set_f1, question_family_accuracy]
+        secondary_metrics: [multi_answer_jaccard, ece, brier]
+      medical_cxr_vqa_binary:
+        answer_space: [yes, no]
+        source_question_families: [presence, abnormality]
+        closed_set_protocol: closed_binary_v3
+        primary_metrics: [accuracy, semantic_class_macro_f1, ece, brier]
+      vindr_cxr_vqa:
+        semantic_metrics: [accuracy, question_type_accuracy, ece, brier]
+        grounding_metrics: [box_iou, localization_froc]
+        grounding_reported_separately: true
+      vindr_cxr_vqa_binary:
+        answer_space: [yes, no]
+        source_question_types: [Yes/No, Is there]
+        closed_set_protocol: closed_binary_v3
+        primary_metrics: [accuracy, semantic_class_macro_f1, ece, brier]
+      rad_restruct:
+        evaluation_mode: hierarchical_autoregressive
+        official_evaluator_required: true

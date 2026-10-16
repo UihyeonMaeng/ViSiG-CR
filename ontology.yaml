@@ -1,0 +1,1411 @@
+description: >
+  Coverage-frozen hierarchical chest X-ray ontology for ViSiG-CR. It includes
+  the 41 CoNNS concepts, common CheXpert/MS-CXR targets, and a limited alpha
+  extension for devices, technical context, location-sensitive findings, and
+  external-dataset portability. Coverage is paper-ready in scope, but clinical
+  validity still requires the audit protocol documented in ONTOLOGY_VALIDATION.md.
+
+metadata:
+  name: ViSiG-CR CXR Concept Ontology
+  scope: frontal adult chest radiography
+  release_status: coverage_frozen_candidate
+  clinical_validation_required: true
+  query_setting: target_explicit
+  graph_entry: visual_only
+  intended_tasks:
+    - report_concept_event_extraction
+    - question_target_selection
+    - visual_case_graph_construction
+    - question_conditioned_evidence_retrieval
+  exclusions:
+    - open_ended_diagnosis_as_primary_task
+    - temporal_prior_reasoning_as_primary_task
+    - pediatric_specific_ontology
+    - CT_only_findings
+  provenance:
+    conns_41: Concept-Guided Noisy Negative Suppression ontology concepts
+    chexpert_14: MIMIC-CXR-JPG and CheXpert label vocabulary
+    ms_cxr_8: MS-CXR phrase-grounding findings
+    visig_cr_alpha: retrieval-specific devices, technical context, and location-sensitive extensions
+
+# Deterministic evidence-to-concept support policy. Direct support is generated
+# automatically from each finding label and synonym. The patterns below are the
+# deliberately small set of clinically safe implications that do not literally
+# contain the target finding name (for example, normal heart size -> absent
+# cardiomegaly). They are part of the ontology hash and therefore part of the
+# extraction/resume identity.
+semantic_support:
+  schema_version: visig_cr_semantic_support_v1
+  present_only_findings:
+    - no_acute_cardiopulmonary_abnormality
+    - normal_lung_transparency
+    - normal_cardiac_silhouette
+    - normal_hilar_contour
+    - intact_osseous_structures
+    - low_lung_volume
+    - support_device
+    - rotation
+    - underpenetration
+    - portable_ap_projection
+  direct_anchor_patterns:
+    pleural_effusion:
+      - '\b(?:pleural\s+)?effusions\b'
+    pneumothorax:
+      - '\bpneumothoraces\b'
+    fracture:
+      - '\bfractures\b'
+    lung_opacity:
+      - '\bopacit(?:y|ies)\b'
+    consolidation:
+      - '\bconsolidations\b'
+      - '\bconsolidative\s+(?:opacity|opacities|process|component)\b'
+    atelectasis:
+      - '\batelectatic\s+changes?\b'
+      - '\b(?:right|left)?\s*(?:upper|middle|lower)?\s*lobe\s+collapse\b'
+      - '\b(?:right|left)?\s*(?:upper|middle|lower)?\s*lobe\s+(?:is\s+)?collapsed\b'
+    cardiomegaly:
+      - '\b(?:the\s+)?(?:heart(?:\s+size)?|cardiac\s+silhouette)\s+(?:is|appears|remains)?\s*(?:(?:mildly|moderately|severely|slightly|borderline)\s+)?enlarged\b'
+      - '\b(?:mild|moderate|severe|slight|borderline)(?:\s+to\s+(?:moderate|severe))?\s+enlargement\s+of\s+(?:the\s+)?cardiac\s+silhouette\b'
+    low_lung_volume:
+      - '\blung\s+volumes?\s+(?:are|is|remain|remains)?\s*(?:persistently\s+)?low\b'
+      - '\b(?:the\s+)?lungs?\s+(?:are|is)?\s*low\s+in\s+volume\b'
+    hemidiaphragm_elevation:
+      - '\belevation\s+of\s+(?:the\s+)?(?:right|left)?\s*hemidiaphragm\b'
+      - '\beventration\s+of\s+(?:the\s+)?(?:right|left)?\s*hemidiaphragm\b'
+    mediastinal_widening:
+      - '\bwidening\s+of\s+(?:the\s+)?(?:upper\s+|superior\s+)?mediastinum\b'
+      - '\bwidening\s+of\s+(?:the\s+)?mediastinal\s+contour\b'
+      - '\b(?:the\s+)?mediastinum\s+(?:is|appears|remains)?\s*(?:slightly|mildly|moderately|markedly)?\s*widened\b'
+    central_venous_catheter:
+      - '\b(?:right|left)?\s*(?:internal\s+jugular|ij|subclavian)\s+(?:venous\s+)?(?:line|catheter)\b'
+      - '\b(?:hemo)?dialysis\s+catheter\b'
+      - '\bport-?a-?cath\b'
+    aortic_elongation:
+      - '\b(?:the\s+)?(?:thoracic\s+|descending\s+)?aorta\s+(?:is|appears|remains)?\s*(?:mildly|slightly)?\s*tortuous\b'
+      - '\btortuosity\s+of\s+(?:the\s+)?(?:thoracic\s+|descending\s+)?aorta\b'
+      - '\belongation\s+of\s+(?:the\s+)?aorta\b'
+    aortic_atherosclerosis:
+      - '\b(?:atherosclerotic\s+)?calcifications?\s+(?:of|along)\s+(?:the\s+)?(?:thoracic\s+)?aorta\b'
+      - '\b(?:the\s+)?(?:thoracic\s+)?aorta\s+(?:is|appears)?\s*calcified\b'
+    vertebral_degenerative_change:
+      - '\bdegenerative\s+changes?\s+(?:of|in|involving)\s+(?:the\s+)?thoracic\s+spine\b'
+    vascular_congestion:
+      - '\bprominen(?:ce|t)\s+of\s+(?:the\s+)?pulmonary\s+vasculature\b'
+      - '\bpulmonary\s+vasculature\s+(?:is|appears)?\s*(?:mildly\s+)?engorged\b'
+      - '\bupper\s+zone\s+(?:vascular\s+)?redistribution\b'
+      - '\b(?:vascular\s+)?cephalization\b'
+      - '\bcentral\s+pulmonary\s+venous\s+congestion\b'
+  curated_implications:
+    no_acute_cardiopulmonary_abnormality:
+      present:
+        - '\bno\s+(?:acute|active)\s+(?:cardiopulmonary|chest)\s+(?:abnormality|process|disease|findings?)\b'
+    normal_lung_transparency:
+      present:
+        - '\b(?:the\s+)?(?:lungs?|lung\s+fields?)\s+(?:are|is|appear|appears|remain|remains)?\s*(?:clear|unremarkable)\b'
+        - '\b(?:the\s+)?(?:lungs?|lung\s+fields?)\s+(?:are|appear|remain)\s+(?:otherwise\s+|well\s+expanded\s+and\s+)?(?:clear|unremarkable)\b'
+    normal_cardiac_silhouette:
+      present:
+        - '\b(?:the\s+)?(?:heart\s+and\s+mediastinal\s+contours|heart(?:\s+size)?|cardiac\s+silhouette)\s+(?:is|are|appear|appears|remain|remains)?\s*(?:within\s+normal\s+limits|normal(?:\s+in\s+size)?|not\s+enlarged)\b'
+        - '\b(?:the\s+)?cardiomediastinal\s+silhouette\s+(?:is|appears|remains)?\s*(?:within\s+normal\s+limits|normal|unremarkable|not\s+enlarged)\b'
+        - '\bcardiac(?:,|\s+and)\s+mediastinal(?:\s+and\s+hilar)?\s+contours?\s+(?:are|appear|remain)?\s*(?:normal|unremarkable)\b'
+    cardiomegaly:
+      present:
+        - '\b(?:the\s+)?(?:heart(?:\s+size)?|cardiac\s+silhouette)\s+(?:is|appears|remains)?\s*(?:enlarged|increased)\b'
+      absent:
+        - '\b(?:the\s+)?(?:heart\s+and\s+mediastinal\s+contours|heart(?:\s+size)?|cardiac\s+silhouette)\s+(?:is|are|appear|appears|remain|remains)?\s*(?:within\s+normal\s+limits|normal(?:\s+in\s+size)?|not\s+enlarged)\b'
+        - '\b(?:the\s+)?cardiomediastinal\s+silhouette\s+(?:is|appears|remains)?\s*(?:within\s+normal\s+limits|normal|unremarkable|not\s+enlarged)\b'
+        - '\bcardiac(?:,|\s+and)\s+mediastinal(?:\s+and\s+hilar)?\s+contours?\s+(?:are|appear|remain)?\s*(?:normal|unremarkable)\b'
+    normal_hilar_contour:
+      present:
+        - '\b(?:the\s+)?(?:hila|hilar\s+contours?)\s+(?:are|is|appear|appears|remain|remains)?\s*(?:normal|unremarkable)\b'
+        - '\b(?:the\s+)?hilar\s+structures?\s+(?:are|appear|remain)?\s*(?:normal|unremarkable)\b'
+    intact_osseous_structures:
+      present:
+        - '\b(?:the\s+)?(?:visualized\s+)?(?:osseous|bony)\s+structures?\s+(?:are|is|appear|appears|remain|remains)?\s*(?:intact|unremarkable)\b'
+        - '\bno\s+acute\s+(?:osseous|bony)\s+abnormalit(?:y|ies)\b'
+        - '\bno\s+acute\s+bone\s+abnormalit(?:y|ies)\b'
+    lung_mass:
+      absent:
+        - '\bno\s+(?:focal\s+)?(?:pulmonary\s+|lung\s+)?mass(?:es)?\b'
+
+findings:
+  cxr_finding:
+    label: CXR finding
+    description: Root node for all represented chest radiograph concepts.
+    parent: null
+    abstract: true
+    extractable: false
+    selectable: false
+    synonyms: []
+
+  # -----------------------------------------------------------------------
+  # Normal and rule-out descriptors. These are stored for coverage/audit but
+  # are retained for audit but excluded from online comparison candidates.
+  # -----------------------------------------------------------------------
+  normal_descriptor:
+    label: normal descriptor
+    description: Explicitly normal radiographic descriptor.
+    parent: cxr_finding
+    abstract: true
+    extractable: false
+    selectable: false
+    synonyms: []
+  no_acute_cardiopulmonary_abnormality:
+    label: no acute cardiopulmonary abnormality
+    description: Explicit global statement that no acute cardiopulmonary abnormality is seen.
+    parent: normal_descriptor
+    extractable: true
+    selectable: false
+    default_anatomy: thorax
+    allowed_anatomy: [thorax]
+    retrieval_policy: context_only
+    coverage_tier: alpha
+    synonyms: [no acute cardiopulmonary abnormality, no acute cardiopulmonary process, no acute cardiopulmonary findings, no active cardiopulmonary disease, no acute disease]
+  normal_lung_transparency:
+    label: normal lung transparency
+    description: Explicitly normal lung transparency or clear lungs.
+    parent: normal_descriptor
+    extractable: true
+    selectable: false
+    default_anatomy: lung
+    allowed_anatomy: [lung]
+    retrieval_policy: context_only
+    coverage_tier: conns_41
+    synonyms: [normal lung transparency, clear lungs, lungs are clear, lung fields are clear]
+  normal_cardiac_silhouette:
+    label: normal cardiac silhouette
+    description: Explicitly normal cardiac size or silhouette.
+    parent: normal_descriptor
+    extractable: true
+    selectable: false
+    default_anatomy: cardiac_silhouette
+    allowed_anatomy: [heart, cardiac_silhouette]
+    retrieval_policy: context_only
+    coverage_tier: conns_41
+    synonyms: [normal cardiac silhouette, normal heart size, cardiac silhouette is normal, heart is normal in size, heart size is normal, heart and mediastinal contours are normal]
+  normal_hilar_contour:
+    label: normal hilar contour
+    description: Explicitly normal hilar contour.
+    parent: normal_descriptor
+    extractable: true
+    selectable: false
+    default_anatomy: hilum
+    allowed_anatomy: [hilum]
+    retrieval_policy: context_only
+    coverage_tier: conns_41
+    synonyms: [normal hilar contour, normal hila, hila are normal]
+  intact_osseous_structures:
+    label: intact osseous structures
+    description: Explicitly intact visible osseous structures.
+    parent: normal_descriptor
+    extractable: true
+    selectable: false
+    default_anatomy: bone
+    allowed_anatomy: [bone, rib, clavicle, spine, shoulder_girdle]
+    retrieval_policy: context_only
+    coverage_tier: conns_41
+    synonyms: [intact osseous structures, no acute osseous abnormality, no acute bony abnormality, bones are intact]
+
+  # -----------------------------------------------------------------------
+  # Pleural findings
+  # -----------------------------------------------------------------------
+  pleural_abnormality:
+    label: pleural abnormality
+    description: Abnormality involving the pleura or pleural space.
+    parent: cxr_finding
+    abstract: true
+    extractable: false
+    selectable: true
+    default_anatomy: pleura
+    synonyms: [pleural abnormality, pleural disease]
+  pleural_effusion:
+    label: pleural effusion
+    description: Pleural fluid, layering fluid, or costophrenic blunting compatible with effusion.
+    parent: pleural_abnormality
+    extractable: true
+    selectable: true
+    default_anatomy: pleural_space
+    allowed_anatomy: [pleural_space, pleura, costophrenic_angle, lower_lung_zone, thorax]
+    retrieval_policy: clinical
+    coverage_tier: conns_41
+    question_attributes: [presence, laterality, severity]
+    synonyms: [pleural effusion, pleural fluid, effusion, costophrenic blunting]
+  pneumothorax:
+    label: pneumothorax
+    description: Air in the pleural space.
+    parent: pleural_abnormality
+    extractable: true
+    selectable: true
+    default_anatomy: pleural_space
+    allowed_anatomy: [pleural_space, pleura, apex, thorax]
+    retrieval_policy: clinical
+    coverage_tier: conns_41
+    question_attributes: [presence, laterality, severity]
+    synonyms: [pneumothorax, pleural air]
+  pleural_thickening:
+    label: pleural thickening
+    description: Pleural thickening, plaque, or pleural scarring.
+    parent: pleural_abnormality
+    extractable: true
+    selectable: true
+    default_anatomy: pleura
+    allowed_anatomy: [pleura, pleural_space, apex, chest_wall, thorax]
+    retrieval_policy: clinical
+    coverage_tier: conns_41
+    question_attributes: [presence, laterality, anatomy]
+    synonyms: [pleural thickening, pleural scarring, pleural plaque]
+  subcutaneous_emphysema:
+    label: subcutaneous emphysema
+    description: Gas in the chest wall or subcutaneous soft tissues.
+    parent: pleural_abnormality
+    extractable: true
+    selectable: true
+    default_anatomy: subcutaneous_tissue
+    allowed_anatomy: [subcutaneous_tissue, chest_wall, thorax]
+    retrieval_policy: clinical
+    coverage_tier: alpha
+    question_attributes: [presence, laterality, anatomy]
+    synonyms: [subcutaneous emphysema, subcutaneous gas, chest wall emphysema]
+
+  # -----------------------------------------------------------------------
+  # Pulmonary opacity and airspace findings
+  # -----------------------------------------------------------------------
+  parenchymal_abnormality:
+    label: parenchymal abnormality
+    description: Abnormality of the lung parenchyma.
+    parent: cxr_finding
+    abstract: true
+    extractable: false
+    selectable: true
+    default_anatomy: lung
+    synonyms: [parenchymal abnormality, pulmonary parenchymal abnormality]
+  parenchymal_opacity:
+    label: parenchymal opacity family
+    description: Broad family of pulmonary opacities and airspace patterns.
+    parent: parenchymal_abnormality
+    abstract: true
+    extractable: false
+    selectable: true
+    default_anatomy: lung
+    synonyms: [parenchymal opacity, airspace abnormality]
+  lung_opacity:
+    label: lung opacity
+    description: Non-specific pulmonary opacity.
+    parent: parenchymal_opacity
+    extractable: true
+    selectable: true
+    default_anatomy: lung
+    allowed_anatomy: [lung, upper_lung_zone, mid_lung_zone, lower_lung_zone, upper_lobe, middle_lobe, lower_lobe, apex, base, perihilar_region, retrocardiac_region]
+    retrieval_policy: clinical
+    coverage_tier: conns_41
+    question_attributes: [presence, laterality, severity, anatomy, finding_identity]
+    synonyms: [lung opacity, pulmonary opacity, airspace opacity]
+  increased_density:
+    label: increased density
+    description: Non-specific increased pulmonary density stated in the report.
+    parent: parenchymal_opacity
+    extractable: true
+    selectable: true
+    default_anatomy: lung
+    allowed_anatomy: [lung, upper_lung_zone, mid_lung_zone, lower_lung_zone, upper_lobe, middle_lobe, lower_lobe, apex, base, perihilar_region, retrocardiac_region]
+    retrieval_policy: clinical
+    coverage_tier: conns_41
+    question_attributes: [presence, laterality, anatomy, finding_identity]
+    synonyms: [increased density, focal density, pulmonary density]
+  infiltrate:
+    label: infiltrate
+    description: Reported pulmonary infiltrate without a more specific canonical diagnosis.
+    parent: parenchymal_opacity
+    extractable: true
+    selectable: true
+    default_anatomy: lung
+    allowed_anatomy: [lung, upper_lung_zone, mid_lung_zone, lower_lung_zone, upper_lobe, middle_lobe, lower_lobe, apex, base, perihilar_region, retrocardiac_region]
+    retrieval_policy: clinical
+    coverage_tier: conns_41
+    question_attributes: [presence, laterality, anatomy, finding_identity]
+    synonyms: [infiltrate, pulmonary infiltrate, infiltrates]
+  alveolar_pattern:
+    label: alveolar pattern
+    description: Alveolar or airspace pattern not otherwise specified.
+    parent: parenchymal_opacity
+    extractable: true
+    selectable: true
+    default_anatomy: lung
+    allowed_anatomy: [lung, upper_lung_zone, mid_lung_zone, lower_lung_zone, upper_lobe, middle_lobe, lower_lobe, perihilar_region]
+    retrieval_policy: clinical
+    coverage_tier: conns_41
+    question_attributes: [presence, laterality, severity, anatomy, finding_identity]
+    synonyms: [alveolar pattern, alveolar opacity, alveolar airspace pattern]
+  atelectasis:
+    label: atelectasis
+    description: Subsegmental, plate-like, lobar, or compressive atelectasis.
+    parent: parenchymal_opacity
+    extractable: true
+    selectable: true
+    default_anatomy: lung
+    allowed_anatomy: [lung, upper_lung_zone, mid_lung_zone, lower_lung_zone, upper_lobe, middle_lobe, lower_lobe, base, perihilar_region, retrocardiac_region]
+    retrieval_policy: clinical
+    coverage_tier: conns_41
+    question_attributes: [presence, laterality, severity, anatomy, finding_identity]
+    synonyms: [atelectasis, subsegmental atelectasis, basilar atelectasis, linear atelectasis]
+  consolidation:
+    label: consolidation
+    description: Airspace consolidation.
+    parent: parenchymal_opacity
+    extractable: true
+    selectable: true
+    default_anatomy: lung
+    allowed_anatomy: [lung, upper_lung_zone, mid_lung_zone, lower_lung_zone, upper_lobe, middle_lobe, lower_lobe, base, perihilar_region, retrocardiac_region]
+    retrieval_policy: clinical
+    coverage_tier: conns_41
+    question_attributes: [presence, laterality, severity, anatomy, finding_identity]
+    synonyms: [consolidation, airspace consolidation, focal consolidation]
+  pneumonia:
+    label: pneumonia
+    description: Reported pneumonia or infectious airspace process.
+    parent: parenchymal_opacity
+    extractable: true
+    selectable: true
+    default_anatomy: lung
+    allowed_anatomy: [lung, upper_lung_zone, mid_lung_zone, lower_lung_zone, upper_lobe, middle_lobe, lower_lobe, base, perihilar_region, retrocardiac_region]
+    retrieval_policy: clinical
+    coverage_tier: conns_41
+    question_attributes: [presence, laterality, severity, anatomy, finding_identity]
+    synonyms: [pneumonia, pulmonary infection, infectious airspace disease]
+  pulmonary_edema:
+    label: pulmonary edema
+    description: Interstitial or alveolar pulmonary edema.
+    parent: parenchymal_opacity
+    extractable: true
+    selectable: true
+    default_anatomy: lung
+    allowed_anatomy: [lung, perihilar_region, lower_lung_zone]
+    retrieval_policy: clinical
+    coverage_tier: conns_41
+    question_attributes: [presence, severity, anatomy, finding_identity]
+    synonyms: [pulmonary edema, interstitial edema, alveolar edema, edema]
+
+  # -----------------------------------------------------------------------
+  # Interstitial/chronic lung findings
+  # -----------------------------------------------------------------------
+  chronic_interstitial_abnormality:
+    label: chronic or interstitial lung abnormality
+    description: Chronic interstitial, fibrotic, or bronchial abnormality.
+    parent: parenchymal_abnormality
+    abstract: true
+    extractable: false
+    selectable: true
+    default_anatomy: lung
+    synonyms: [chronic lung abnormality, interstitial lung abnormality]
+  interstitial_pattern:
+    label: interstitial pattern
+    description: Interstitial pulmonary pattern.
+    parent: chronic_interstitial_abnormality
+    extractable: true
+    selectable: true
+    default_anatomy: lung
+    allowed_anatomy: [lung, upper_lung_zone, mid_lung_zone, lower_lung_zone, perihilar_region]
+    retrieval_policy: clinical
+    coverage_tier: conns_41
+    question_attributes: [presence, laterality, severity, anatomy, finding_identity]
+    synonyms: [interstitial pattern, interstitial opacity, interstitial markings]
+  pulmonary_fibrosis:
+    label: pulmonary fibrosis
+    description: Fibrotic interstitial lung disease or pulmonary fibrosis.
+    parent: chronic_interstitial_abnormality
+    extractable: true
+    selectable: true
+    default_anatomy: lung
+    allowed_anatomy: [lung, upper_lung_zone, lower_lung_zone, apex, base]
+    retrieval_policy: clinical
+    coverage_tier: alpha
+    question_attributes: [presence, laterality, severity, anatomy, finding_identity]
+    synonyms: [pulmonary fibrosis, interstitial fibrosis, fibrotic lung disease]
+  fibrotic_band:
+    label: fibrotic band
+    description: Linear fibrotic band or focal scarring.
+    parent: chronic_interstitial_abnormality
+    extractable: true
+    selectable: true
+    default_anatomy: lung
+    allowed_anatomy: [lung, upper_lung_zone, mid_lung_zone, lower_lung_zone, upper_lobe, middle_lobe, lower_lobe, apex, base]
+    retrieval_policy: clinical
+    coverage_tier: conns_41
+    question_attributes: [presence, laterality, anatomy]
+    synonyms: [fibrotic band, fibrous band, linear scarring]
+  chronic_lung_change:
+    label: chronic lung change
+    description: Non-specific chronic pulmonary change.
+    parent: chronic_interstitial_abnormality
+    extractable: true
+    selectable: true
+    default_anatomy: lung
+    allowed_anatomy: [lung, upper_lung_zone, mid_lung_zone, lower_lung_zone, apex, base]
+    retrieval_policy: clinical
+    coverage_tier: conns_41
+    question_attributes: [presence, laterality, anatomy]
+    synonyms: [chronic changes, chronic lung changes, chronic pulmonary changes]
+  bronchiectasis:
+    label: bronchiectasis
+    description: Bronchial dilatation compatible with bronchiectasis.
+    parent: chronic_interstitial_abnormality
+    extractable: true
+    selectable: true
+    default_anatomy: lung
+    allowed_anatomy: [lung, upper_lobe, middle_lobe, lower_lobe, base]
+    retrieval_policy: clinical
+    coverage_tier: conns_41
+    question_attributes: [presence, laterality, anatomy]
+    synonyms: [bronchiectasis, bronchial ectasia]
+
+  # -----------------------------------------------------------------------
+  # Lung volume / obstructive pattern
+  # -----------------------------------------------------------------------
+  lung_volume_abnormality:
+    label: lung volume abnormality
+    description: Abnormally increased or decreased lung volume.
+    parent: parenchymal_abnormality
+    abstract: true
+    extractable: false
+    selectable: true
+    default_anatomy: lung
+    synonyms: [lung volume abnormality]
+  hyperinflation:
+    label: hyperinflation
+    description: Hyperexpanded or hyperinflated lungs.
+    parent: lung_volume_abnormality
+    extractable: true
+    selectable: true
+    default_anatomy: lung
+    allowed_anatomy: [lung, thorax]
+    retrieval_policy: clinical
+    coverage_tier: conns_41
+    question_attributes: [presence, severity]
+    synonyms: [hyperinflation, hyperinflated lung, hyperexpanded lungs]
+  emphysema:
+    label: emphysema
+    description: Radiographic emphysematous change.
+    parent: lung_volume_abnormality
+    extractable: true
+    selectable: true
+    default_anatomy: lung
+    allowed_anatomy: [lung, upper_lung_zone, lower_lung_zone, apex]
+    retrieval_policy: clinical
+    coverage_tier: alpha
+    question_attributes: [presence, severity, anatomy]
+    synonyms: [emphysema, emphysematous change]
+  low_lung_volume:
+    label: low lung volume
+    description: Hypoexpansion or low inspiratory lung volume.
+    parent: lung_volume_abnormality
+    extractable: true
+    selectable: false
+    default_anatomy: lung
+    allowed_anatomy: [lung, thorax]
+    retrieval_policy: context_only
+    coverage_tier: conns_41
+    synonyms: [hypoexpansion, low lung volume, low lung volumes, poor inspiration]
+
+  # -----------------------------------------------------------------------
+  # Focal lesions
+  # -----------------------------------------------------------------------
+  focal_lung_lesion:
+    label: focal lung lesion family
+    description: Focal nodule, mass, or unspecified lung lesion.
+    parent: parenchymal_abnormality
+    abstract: true
+    extractable: false
+    selectable: true
+    default_anatomy: lung
+    synonyms: [focal lung lesion, focal pulmonary lesion]
+  lung_lesion:
+    label: lung lesion
+    description: Unspecified focal pulmonary lesion.
+    parent: focal_lung_lesion
+    extractable: true
+    selectable: true
+    default_anatomy: lung
+    allowed_anatomy: [lung, upper_lung_zone, mid_lung_zone, lower_lung_zone, upper_lobe, middle_lobe, lower_lobe, apex, base, perihilar_region]
+    retrieval_policy: clinical
+    coverage_tier: conns_41
+    question_attributes: [presence, laterality, anatomy, finding_identity]
+    synonyms: [lung lesion, pulmonary lesion]
+  lung_nodule:
+    label: lung nodule
+    description: Pulmonary nodule.
+    parent: focal_lung_lesion
+    extractable: true
+    selectable: true
+    default_anatomy: lung
+    allowed_anatomy: [lung, upper_lung_zone, mid_lung_zone, lower_lung_zone, upper_lobe, middle_lobe, lower_lobe, apex, base, perihilar_region]
+    retrieval_policy: clinical
+    coverage_tier: conns_41
+    question_attributes: [presence, laterality, severity, anatomy, finding_identity]
+    synonyms: [lung nodule, pulmonary nodule, nodule]
+  lung_mass:
+    label: lung mass
+    description: Pulmonary mass.
+    parent: focal_lung_lesion
+    extractable: true
+    selectable: true
+    default_anatomy: lung
+    allowed_anatomy: [lung, upper_lung_zone, mid_lung_zone, lower_lung_zone, upper_lobe, middle_lobe, lower_lobe, apex, base, perihilar_region]
+    retrieval_policy: clinical
+    coverage_tier: alpha
+    question_attributes: [presence, laterality, severity, anatomy, finding_identity]
+    synonyms: [lung mass, pulmonary mass]
+  calcified_granuloma:
+    label: calcified granuloma
+    description: Calcified pulmonary granuloma.
+    parent: focal_lung_lesion
+    extractable: true
+    selectable: true
+    default_anatomy: lung
+    allowed_anatomy: [lung, upper_lung_zone, mid_lung_zone, lower_lung_zone, upper_lobe, middle_lobe, lower_lobe, apex, base]
+    retrieval_policy: clinical
+    coverage_tier: alpha
+    question_attributes: [presence, laterality, anatomy, finding_identity]
+    synonyms: [calcified granuloma, granuloma, calcified pulmonary nodule]
+
+  # -----------------------------------------------------------------------
+  # Cardiac, vascular, and mediastinal findings
+  # -----------------------------------------------------------------------
+  cardiomediastinal_abnormality:
+    label: cardiomediastinal abnormality
+    description: Cardiac, vascular, hilar, aortic, or mediastinal abnormality.
+    parent: cxr_finding
+    abstract: true
+    extractable: false
+    selectable: true
+    default_anatomy: mediastinum
+    synonyms: [cardiomediastinal abnormality]
+  cardiomegaly:
+    label: cardiomegaly
+    description: Enlarged cardiac silhouette.
+    parent: cardiomediastinal_abnormality
+    extractable: true
+    selectable: true
+    default_anatomy: cardiac_silhouette
+    allowed_anatomy: [heart, cardiac_silhouette]
+    retrieval_policy: clinical
+    coverage_tier: conns_41
+    question_attributes: [presence, severity]
+    synonyms: [cardiomegaly, enlarged cardiac silhouette, cardiac enlargement]
+  enlarged_cardiomediastinum:
+    label: enlarged cardiomediastinum
+    description: Enlarged or widened cardiomediastinal silhouette.
+    parent: cardiomediastinal_abnormality
+    extractable: true
+    selectable: true
+    default_anatomy: mediastinum
+    allowed_anatomy: [mediastinum, cardiac_silhouette, thorax]
+    retrieval_policy: clinical
+    coverage_tier: conns_41
+    question_attributes: [presence, severity]
+    synonyms: [enlarged cardiomediastinum, enlarged cardiomediastinal silhouette]
+  mediastinal_widening:
+    label: mediastinal widening
+    description: Widening of the mediastinum.
+    parent: cardiomediastinal_abnormality
+    extractable: true
+    selectable: true
+    default_anatomy: mediastinum
+    allowed_anatomy: [mediastinum, upper_mediastinum, lower_mediastinum]
+    retrieval_policy: clinical
+    coverage_tier: alpha
+    question_attributes: [presence, severity]
+    synonyms: [mediastinal widening, widened mediastinum, mediastinal enlargement]
+  vascular_congestion:
+    label: pulmonary vascular congestion
+    description: Pulmonary vascular congestion or cephalization.
+    parent: cardiomediastinal_abnormality
+    extractable: true
+    selectable: true
+    default_anatomy: pulmonary_vasculature
+    allowed_anatomy: [pulmonary_vasculature, hilum, perihilar_region, lung]
+    retrieval_policy: clinical
+    coverage_tier: alpha
+    question_attributes: [presence, severity]
+    synonyms: [vascular congestion, pulmonary vascular congestion, vascular cephalization]
+  hilar_vascular_enlargement:
+    label: vascular hilar enlargement
+    description: Enlarged hilar vessels or vascular hilar prominence.
+    parent: cardiomediastinal_abnormality
+    extractable: true
+    selectable: true
+    default_anatomy: hilum
+    allowed_anatomy: [hilum, pulmonary_vasculature, perihilar_region]
+    retrieval_policy: clinical
+    coverage_tier: conns_41
+    question_attributes: [presence, laterality, severity]
+    synonyms: [vascular hilar enlargement, hilar vascular enlargement, enlarged hila]
+  aortic_elongation:
+    label: aortic elongation
+    description: Elongated or tortuous thoracic aorta.
+    parent: cardiomediastinal_abnormality
+    extractable: true
+    selectable: true
+    default_anatomy: aorta
+    allowed_anatomy: [aorta, mediastinum]
+    retrieval_policy: clinical
+    coverage_tier: conns_41
+    question_attributes: [presence, severity]
+    synonyms: [aortic elongation, elongated aorta, tortuous aorta, aortic tortuosity]
+  aortic_atherosclerosis:
+    label: aortic atherosclerosis
+    description: Aortic atherosclerotic calcification or atheromatosis.
+    parent: cardiomediastinal_abnormality
+    extractable: true
+    selectable: true
+    default_anatomy: aorta
+    allowed_anatomy: [aorta, mediastinum]
+    retrieval_policy: clinical
+    coverage_tier: conns_41
+    question_attributes: [presence, severity]
+    synonyms: [aortic atheromatosis, aortic atherosclerosis, aortic calcification]
+  goiter:
+    label: goiter
+    description: Thyroid enlargement or goiter visible on chest radiograph.
+    parent: cardiomediastinal_abnormality
+    extractable: true
+    selectable: true
+    default_anatomy: upper_mediastinum
+    allowed_anatomy: [upper_mediastinum, mediastinum, trachea]
+    retrieval_policy: clinical
+    coverage_tier: conns_41
+    question_attributes: [presence, laterality, anatomy]
+    synonyms: [goiter, thyroid enlargement, enlarged thyroid]
+
+  # -----------------------------------------------------------------------
+  # Diaphragm and upper abdomen
+  # -----------------------------------------------------------------------
+  diaphragm_upper_abdomen_abnormality:
+    label: diaphragm or upper abdomen abnormality
+    description: Abnormality of the diaphragm or visible upper abdomen.
+    parent: cxr_finding
+    abstract: true
+    extractable: false
+    selectable: true
+    default_anatomy: diaphragm
+    synonyms: [diaphragmatic abnormality]
+  hemidiaphragm_elevation:
+    label: hemidiaphragm elevation
+    description: Elevated hemidiaphragm.
+    parent: diaphragm_upper_abdomen_abnormality
+    extractable: true
+    selectable: true
+    default_anatomy: hemidiaphragm
+    allowed_anatomy: [hemidiaphragm, diaphragm]
+    retrieval_policy: clinical
+    coverage_tier: conns_41
+    question_attributes: [presence, laterality, severity]
+    synonyms: [hemidiaphragm elevation, elevated hemidiaphragm, diaphragmatic elevation]
+  hiatal_hernia:
+    label: hiatal hernia
+    description: Hiatal hernia or retrocardiac air-fluid level compatible with hiatal hernia.
+    parent: diaphragm_upper_abdomen_abnormality
+    extractable: true
+    selectable: true
+    default_anatomy: lower_mediastinum
+    allowed_anatomy: [lower_mediastinum, mediastinum, diaphragm, retrocardiac_region]
+    retrieval_policy: clinical
+    coverage_tier: conns_41
+    question_attributes: [presence, severity, anatomy]
+    synonyms: [hiatal hernia, hiatus hernia]
+
+  # -----------------------------------------------------------------------
+  # Osseous and chest wall findings
+  # -----------------------------------------------------------------------
+  osseous_abnormality:
+    label: osseous abnormality
+    description: Abnormality of the visible osseous structures.
+    parent: cxr_finding
+    abstract: true
+    extractable: false
+    selectable: true
+    default_anatomy: bone
+    synonyms: [osseous abnormality, bone abnormality]
+  fracture:
+    label: fracture
+    description: Visible acute or healing fracture.
+    parent: osseous_abnormality
+    extractable: true
+    selectable: true
+    default_anatomy: bone
+    allowed_anatomy: [bone, rib, clavicle, spine, shoulder_girdle]
+    retrieval_policy: clinical
+    coverage_tier: conns_41
+    question_attributes: [presence, laterality, anatomy]
+    synonyms: [fracture, rib fracture, clavicle fracture, vertebral fracture]
+  vertebral_degenerative_change:
+    label: vertebral degenerative change
+    description: Degenerative change of the visible spine.
+    parent: osseous_abnormality
+    extractable: true
+    selectable: true
+    default_anatomy: spine
+    allowed_anatomy: [spine, bone]
+    retrieval_policy: clinical
+    coverage_tier: conns_41
+    question_attributes: [presence, severity]
+    synonyms: [vertebral degenerative changes, degenerative spine changes, spondylosis]
+  scoliosis:
+    label: scoliosis
+    description: Scoliotic curvature of the thoracic spine.
+    parent: osseous_abnormality
+    extractable: true
+    selectable: true
+    default_anatomy: spine
+    allowed_anatomy: [spine]
+    retrieval_policy: clinical
+    coverage_tier: conns_41
+    question_attributes: [presence, severity]
+    synonyms: [scoliosis, scoliotic curvature]
+  kyphosis:
+    label: kyphosis
+    description: Exaggerated thoracic kyphosis.
+    parent: osseous_abnormality
+    extractable: true
+    selectable: true
+    default_anatomy: spine
+    allowed_anatomy: [spine]
+    retrieval_policy: clinical
+    coverage_tier: conns_41
+    question_attributes: [presence, severity]
+    synonyms: [kyphosis, thoracic kyphosis]
+  osteopenia:
+    label: osteopenia
+    description: Reduced osseous mineralization.
+    parent: osseous_abnormality
+    extractable: true
+    selectable: true
+    default_anatomy: bone
+    allowed_anatomy: [bone, rib, clavicle, spine]
+    retrieval_policy: clinical
+    coverage_tier: conns_41
+    question_attributes: [presence, severity]
+    synonyms: [osteopenia, demineralized bones, osseous demineralization]
+
+  # -----------------------------------------------------------------------
+  # Devices and support lines. Stored as context by default so they can audit
+  # visual confounding without dominating the clinical relation graph.
+  # -----------------------------------------------------------------------
+  support_device_family:
+    label: support device family
+    description: Tubes, lines, catheters, and implanted support devices.
+    parent: cxr_finding
+    abstract: true
+    extractable: false
+    selectable: false
+    default_anatomy: not_applicable
+    synonyms: [support device family]
+  support_device:
+    label: support device
+    description: Non-specific support device statement.
+    parent: support_device_family
+    extractable: true
+    selectable: false
+    default_anatomy: not_applicable
+    allowed_anatomy: [not_applicable, thorax]
+    retrieval_policy: context_only
+    coverage_tier: conns_41
+    synonyms: [support devices, support device]
+  cardiac_electronic_device:
+    label: cardiac electronic device
+    description: Pacemaker, ICD, or related implanted cardiac electrical device.
+    parent: support_device_family
+    extractable: true
+    selectable: false
+    default_anatomy: heart
+    allowed_anatomy: [heart, cardiac_silhouette, mediastinum, thorax]
+    retrieval_policy: context_only
+    coverage_tier: conns_41
+    synonyms: [electrical device, cardiac electronic device, pacemaker, icd]
+  central_venous_catheter:
+    label: central venous catheter
+    description: Central venous catheter or central line.
+    parent: support_device_family
+    extractable: true
+    selectable: false
+    default_anatomy: mediastinum
+    allowed_anatomy: [mediastinum, thorax, heart]
+    retrieval_policy: context_only
+    coverage_tier: conns_41
+    synonyms: [central venous catheter, central line, cvc]
+  picc_line:
+    label: PICC line
+    description: Peripherally inserted central catheter.
+    parent: support_device_family
+    extractable: true
+    selectable: false
+    default_anatomy: mediastinum
+    allowed_anatomy: [mediastinum, thorax, heart]
+    retrieval_policy: context_only
+    coverage_tier: alpha
+    synonyms: [picc line, peripherally inserted central catheter, picc]
+  pulmonary_artery_catheter:
+    label: pulmonary artery catheter
+    description: Pulmonary artery or Swan-Ganz catheter.
+    parent: support_device_family
+    extractable: true
+    selectable: false
+    default_anatomy: pulmonary_vasculature
+    allowed_anatomy: [pulmonary_vasculature, mediastinum, heart, thorax]
+    retrieval_policy: context_only
+    coverage_tier: alpha
+    synonyms: [pulmonary artery catheter, swan ganz catheter, swan-ganz catheter]
+  endotracheal_tube:
+    label: endotracheal tube
+    description: Endotracheal tube.
+    parent: support_device_family
+    extractable: true
+    selectable: false
+    default_anatomy: trachea
+    allowed_anatomy: [trachea, airway, thorax]
+    retrieval_policy: context_only
+    coverage_tier: conns_41
+    synonyms: [endotracheal tube, et tube, ett]
+  tracheostomy_tube:
+    label: tracheostomy tube
+    description: Tracheostomy tube.
+    parent: support_device_family
+    extractable: true
+    selectable: false
+    default_anatomy: trachea
+    allowed_anatomy: [trachea, airway, thorax]
+    retrieval_policy: context_only
+    coverage_tier: alpha
+    synonyms: [tracheostomy tube, tracheostomy]
+  enteric_tube:
+    label: enteric tube
+    description: Nasogastric or enteric tube.
+    parent: support_device_family
+    extractable: true
+    selectable: false
+    default_anatomy: esophagus
+    allowed_anatomy: [esophagus, upper_abdomen, thorax]
+    retrieval_policy: context_only
+    coverage_tier: conns_41
+    synonyms: [nsg tube, ng tube, nasogastric tube, enteric tube, feeding tube]
+  chest_tube:
+    label: chest tube
+    description: Pleural drainage catheter or thoracostomy tube.
+    parent: support_device_family
+    extractable: true
+    selectable: false
+    default_anatomy: pleural_space
+    allowed_anatomy: [pleural_space, pleura, chest_wall, thorax]
+    retrieval_policy: context_only
+    coverage_tier: alpha
+    synonyms: [chest tube, thoracostomy tube, pleural drain]
+  prosthetic_heart_valve:
+    label: prosthetic heart valve
+    description: Prosthetic cardiac valve.
+    parent: support_device_family
+    extractable: true
+    selectable: false
+    default_anatomy: heart
+    allowed_anatomy: [heart, cardiac_silhouette]
+    retrieval_policy: context_only
+    coverage_tier: alpha
+    synonyms: [prosthetic heart valve, prosthetic valve, valve replacement]
+
+  # -----------------------------------------------------------------------
+  # Technical and acquisition context. These are not clinical query targets.
+  # -----------------------------------------------------------------------
+  technical_quality_family:
+    label: technical or acquisition context
+    description: Projection and technical-quality descriptors that affect visual similarity.
+    parent: cxr_finding
+    abstract: true
+    extractable: false
+    selectable: false
+    default_anatomy: not_applicable
+    synonyms: []
+  rotation:
+    label: patient rotation
+    description: Significant patient rotation.
+    parent: technical_quality_family
+    extractable: true
+    selectable: false
+    default_anatomy: not_applicable
+    allowed_anatomy: [not_applicable, thorax]
+    retrieval_policy: context_only
+    coverage_tier: alpha
+    synonyms: [patient rotation, rotated film, rotation]
+  underpenetration:
+    label: underpenetration
+    description: Underpenetrated chest radiograph.
+    parent: technical_quality_family
+    extractable: true
+    selectable: false
+    default_anatomy: not_applicable
+    allowed_anatomy: [not_applicable, thorax]
+    retrieval_policy: context_only
+    coverage_tier: alpha
+    synonyms: [underpenetration, underpenetrated film, underexposed radiograph]
+  portable_ap_projection:
+    label: portable AP projection
+    description: Portable AP acquisition context.
+    parent: technical_quality_family
+    extractable: true
+    selectable: false
+    default_anatomy: not_applicable
+    allowed_anatomy: [not_applicable, thorax]
+    retrieval_policy: context_only
+    coverage_tier: alpha
+    synonyms: [portable ap, ap portable, portable chest]
+
+finding_families:
+  normal_descriptor: [no_acute_cardiopulmonary_abnormality, normal_lung_transparency, normal_cardiac_silhouette, normal_hilar_contour, intact_osseous_structures]
+  pleural_abnormality: [pleural_effusion, pneumothorax, pleural_thickening, subcutaneous_emphysema]
+  parenchymal_opacity: [lung_opacity, increased_density, infiltrate, alveolar_pattern, atelectasis, consolidation, pneumonia, pulmonary_edema]
+  chronic_interstitial_abnormality: [interstitial_pattern, pulmonary_fibrosis, fibrotic_band, chronic_lung_change, bronchiectasis]
+  lung_volume_abnormality: [hyperinflation, emphysema, low_lung_volume]
+  focal_lung_lesion: [lung_lesion, lung_nodule, lung_mass, calcified_granuloma]
+  cardiomediastinal_abnormality: [cardiomegaly, enlarged_cardiomediastinum, mediastinal_widening, vascular_congestion, hilar_vascular_enlargement, aortic_elongation, aortic_atherosclerosis, goiter]
+  diaphragm_upper_abdomen_abnormality: [hemidiaphragm_elevation, hiatal_hernia]
+  osseous_abnormality: [fracture, vertebral_degenerative_change, scoliosis, kyphosis, osteopenia]
+  support_device_family: [support_device, cardiac_electronic_device, central_venous_catheter, picc_line, pulmonary_artery_catheter, endotracheal_tube, tracheostomy_tube, enteric_tube, chest_tube, prosthetic_heart_valve]
+  technical_quality_family: [rotation, underpenetration, portable_ap_projection]
+
+anatomy:
+  thorax:
+    label: thorax
+    parent: null
+    synonyms: [thorax, chest]
+  lung:
+    label: lung
+    parent: thorax
+    synonyms: [lung, lungs, pulmonary parenchyma]
+  lung_zone:
+    label: lung zone
+    parent: lung
+    synonyms: [lung zone, pulmonary zone]
+  upper_lung_zone:
+    label: upper lung zone
+    parent: lung_zone
+    synonyms: [upper lung zone, upper lung, upper zone]
+  mid_lung_zone:
+    label: mid lung zone
+    parent: lung_zone
+    synonyms: [mid lung zone, middle lung zone, mid lung]
+  lower_lung_zone:
+    label: lower lung zone
+    parent: lung_zone
+    synonyms: [lower lung zone, lower lung, basal lung, basilar region]
+  lung_lobe:
+    label: lung lobe
+    parent: lung
+    synonyms: [lung lobe, lobe]
+  upper_lobe:
+    label: upper lobe
+    parent: lung_lobe
+    synonyms: [upper lobe, rul, lul]
+  middle_lobe:
+    label: middle lobe
+    parent: lung_lobe
+    synonyms: [middle lobe, right middle lobe, rml]
+  lower_lobe:
+    label: lower lobe
+    parent: lung_lobe
+    synonyms: [lower lobe, rll, lll]
+  apex:
+    label: lung apex
+    parent: lung
+    synonyms: [apex, apical lung, lung apex]
+  base:
+    label: lung base
+    parent: lung
+    synonyms: [lung base, base, basilar lung]
+  perihilar_region:
+    label: perihilar region
+    parent: lung
+    synonyms: [perihilar region, perihilar, central lung]
+  retrocardiac_region:
+    label: retrocardiac region
+    parent: lower_lung_zone
+    synonyms: [retrocardiac region, retrocardiac]
+  hilum:
+    label: hilum
+    parent: thorax
+    synonyms: [hilum, hilar region, hila]
+  pulmonary_vasculature:
+    label: pulmonary vasculature
+    parent: thorax
+    synonyms: [pulmonary vasculature, pulmonary vessels, vascular markings]
+  pleura:
+    label: pleura
+    parent: thorax
+    synonyms: [pleura, pleural surface]
+  pleural_space:
+    label: pleural space
+    parent: pleura
+    synonyms: [pleural space]
+  costophrenic_angle:
+    label: costophrenic angle
+    parent: pleural_space
+    synonyms: [costophrenic angle, costophrenic sulcus]
+  heart:
+    label: heart
+    parent: thorax
+    synonyms: [heart]
+  cardiac_silhouette:
+    label: cardiac silhouette
+    parent: heart
+    synonyms: [cardiac silhouette, cardiac contour]
+  mediastinum:
+    label: mediastinum
+    parent: thorax
+    synonyms: [mediastinum, cardiomediastinum]
+  upper_mediastinum:
+    label: upper mediastinum
+    parent: mediastinum
+    synonyms: [upper mediastinum, superior mediastinum]
+  lower_mediastinum:
+    label: lower mediastinum
+    parent: mediastinum
+    synonyms: [lower mediastinum, inferior mediastinum]
+  aorta:
+    label: thoracic aorta
+    parent: mediastinum
+    synonyms: [aorta, thoracic aorta, aortic arch]
+  diaphragm:
+    label: diaphragm
+    parent: thorax
+    synonyms: [diaphragm]
+  hemidiaphragm:
+    label: hemidiaphragm
+    parent: diaphragm
+    synonyms: [hemidiaphragm, hemidiaphragms]
+  airway:
+    label: central airway
+    parent: thorax
+    synonyms: [airway, central airway]
+  trachea:
+    label: trachea
+    parent: airway
+    synonyms: [trachea, tracheal]
+  main_bronchus:
+    label: main bronchus
+    parent: airway
+    synonyms: [main bronchus, mainstem bronchus]
+  esophagus:
+    label: esophagus
+    parent: mediastinum
+    synonyms: [esophagus, oesophagus]
+  chest_wall:
+    label: chest wall
+    parent: thorax
+    synonyms: [chest wall]
+  subcutaneous_tissue:
+    label: subcutaneous tissue
+    parent: chest_wall
+    synonyms: [subcutaneous tissue, soft tissues]
+  bone:
+    label: bone
+    parent: thorax
+    synonyms: [bone, osseous structures]
+  rib:
+    label: rib
+    parent: bone
+    synonyms: [rib, ribs]
+  clavicle:
+    label: clavicle
+    parent: bone
+    synonyms: [clavicle, clavicles]
+  spine:
+    label: spine
+    parent: bone
+    synonyms: [spine, thoracic spine, vertebrae]
+  shoulder_girdle:
+    label: shoulder girdle
+    parent: bone
+    synonyms: [shoulder girdle, shoulder]
+  upper_abdomen:
+    label: upper abdomen
+    parent: thorax
+    synonyms: [upper abdomen, gastric region]
+  unspecified:
+    label: unspecified anatomy
+    parent: null
+    synonyms: [unspecified anatomy, unspecified]
+  not_applicable:
+    label: not applicable
+    parent: null
+    synonyms: [not applicable]
+
+attributes:
+  presence:
+    values: [present, absent, not_mentioned]
+  laterality:
+    values: [left, right, bilateral, midline, unspecified, not_applicable]
+  severity:
+    values: [trace, mild, moderate, severe, unspecified, not_applicable]
+  uncertainty:
+    values: [definite, probable, possible, cannot_exclude, unlikely, indeterminate, unspecified]
+  size:
+    values: [tiny, small, moderate, large, massive, unspecified, not_applicable]
+  morphology:
+    values: [linear, bandlike, patchy, focal, diffuse, nodular, masslike, reticular, interstitial, alveolar, cavitary, calcified, layering, loculated, unspecified, not_applicable]
+  distribution:
+    values: [focal, multifocal, diffuse, perihilar, peripheral, apical, basilar, bibasilar, retrocardiac, lobar, segmental, unspecified, not_applicable]
+  temporal_status:
+    values: [current, new, increased, decreased, stable, resolved, prior_only, unspecified]
+  device_position:
+    values: [satisfactory, high, low, deep, retracted, malpositioned, unspecified, not_applicable]
+  anatomy:
+    values_from: anatomy
+  finding_identity:
+    values_from: findings
+
+allowed_values:
+  laterality: [left, right, bilateral, midline, unspecified, not_applicable]
+  presence: [present, absent, not_mentioned]
+  severity: [trace, mild, moderate, severe, unspecified, not_applicable]
+  uncertainty: [definite, probable, possible, cannot_exclude, unlikely, indeterminate, unspecified]
+  section: [findings, impression, comparison, history, technique, other]
+  temporal_status: [current, new, increased, decreased, stable, resolved, prior_only, unspecified]
+
+uncertainty_strength:
+  definite: 1.00
+  probable: 0.80
+  possible: 0.50
+  cannot_exclude: 0.25
+  unlikely: 0.10
+  indeterminate: 0.40
+  unspecified: null
+
+severity_rank:
+  trace: 0
+  mild: 1
+  moderate: 2
+  severe: 3
+
+# Only clinically plausible alternatives become differential edges. These
+# pairs are coverage-frozen candidates and should be radiologist-adjudicated
+# before the main paper experiment.
+differential_pairs:
+  - [atelectasis, consolidation]
+  - [atelectasis, pneumonia]
+  - [atelectasis, lung_opacity]
+  - [atelectasis, fibrotic_band]
+  - [consolidation, pneumonia]
+  - [consolidation, pulmonary_edema]
+  - [consolidation, lung_opacity]
+  - [pneumonia, pulmonary_edema]
+  - [pneumonia, infiltrate]
+  - [pneumonia, lung_opacity]
+  - [pulmonary_edema, vascular_congestion]
+  - [interstitial_pattern, pulmonary_fibrosis]
+  - [interstitial_pattern, pulmonary_edema]
+  - [lung_nodule, lung_mass]
+  - [lung_nodule, calcified_granuloma]
+  - [lung_lesion, lung_nodule]
+  - [lung_lesion, lung_mass]
+  - [pleural_effusion, pleural_thickening]
+  - [pleural_effusion, atelectasis]
+
+# Query text identifies the target clinical attribute and the answer-space values to cover.
+target_attributes:
+  presence:
+    answer_space: [present, absent, uncertain]
+  laterality:
+    answer_space: [left, right, bilateral, none, uncertain]
+  severity:
+    answer_space: [trace, mild, moderate, severe, uncertain]
+  anatomy:
+    answer_space: []
+  finding_identity:
+    answer_space: []
+
+question_patterns:
+  presence: [is there, are there, evidence of, present, seen, visualized, can be excluded, absent, demonstrate]
+  laterality: [which side, what side, laterality, left or right, unilateral or bilateral]
+  severity: [how severe, severity, degree of, mild moderate or severe]
+  anatomy: [where, location, which lobe, which region, distribution]
+  finding_identity: [what explains, which finding, what abnormality, what is causing, differential diagnosis]
+
+coverage_sets:
+  conns_41:
+    - normal_lung_transparency
+    - normal_cardiac_silhouette
+    - normal_hilar_contour
+    - intact_osseous_structures
+    - aortic_elongation
+    - cardiomegaly
+    - lung_nodule
+    - pleural_effusion
+    - scoliosis
+    - vertebral_degenerative_change
+    - hyperinflation
+    - hilar_vascular_enlargement
+    - atelectasis
+    - aortic_atherosclerosis
+    - pleural_thickening
+    - interstitial_pattern
+    - alveolar_pattern
+    - cardiac_electronic_device
+    - hemidiaphragm_elevation
+    - fracture
+    - low_lung_volume
+    - central_venous_catheter
+    - hiatal_hernia
+    - endotracheal_tube
+    - enteric_tube
+    - bronchiectasis
+    - goiter
+    - osteopenia
+    - chronic_lung_change
+    - infiltrate
+    - fibrotic_band
+    - increased_density
+    - kyphosis
+    - consolidation
+    - pneumothorax
+    - pulmonary_edema
+    - lung_opacity
+    - pneumonia
+    - enlarged_cardiomediastinum
+    - lung_lesion
+    - support_device
+  chexpert_14:
+    - atelectasis
+    - cardiomegaly
+    - consolidation
+    - pulmonary_edema
+    - enlarged_cardiomediastinum
+    - fracture
+    - lung_lesion
+    - lung_opacity
+    - no_acute_cardiopulmonary_abnormality
+    - pleural_effusion
+    - pleural_thickening
+    - pneumonia
+    - pneumothorax
+    - support_device
+  ms_cxr_8:
+    - atelectasis
+    - cardiomegaly
+    - consolidation
+    - pulmonary_edema
+    - lung_opacity
+    - pleural_effusion
+    - pneumonia
+    - pneumothorax
+  visig_cr_primary_question_targets:
+    - pleural_effusion
+    - pneumothorax
+    - atelectasis
+    - consolidation
+    - pneumonia
+    - pulmonary_edema
+    - lung_opacity
+    - cardiomegaly
+    - enlarged_cardiomediastinum
+    - lung_nodule
+    - lung_mass
+    - fracture
+  visig_cr_alpha:
+    - no_acute_cardiopulmonary_abnormality
+    - subcutaneous_emphysema
+    - pulmonary_fibrosis
+    - emphysema
+    - lung_mass
+    - calcified_granuloma
+    - mediastinal_widening
+    - vascular_congestion
+    - picc_line
+    - pulmonary_artery_catheter
+    - tracheostomy_tube
+    - chest_tube
+    - prosthetic_heart_valve
+    - rotation
+    - underpenetration
+    - portable_ap_projection
+
+# Canonical mappings used by evaluation adapters. Mapping a broad source label
+# to a parent concept is allowed; extraction still emits concrete leaf events.
+dataset_mappings:
+  mimic_cxr_jpg_chexpert:
+    Atelectasis: atelectasis
+    Cardiomegaly: cardiomegaly
+    Consolidation: consolidation
+    Edema: pulmonary_edema
+    Enlarged Cardiomediastinum: enlarged_cardiomediastinum
+    Fracture: fracture
+    Lung Lesion: lung_lesion
+    Lung Opacity: lung_opacity
+    No Finding: no_acute_cardiopulmonary_abnormality
+    Pleural Effusion: pleural_effusion
+    Pleural Other: pleural_abnormality
+    Pneumonia: pneumonia
+    Pneumothorax: pneumothorax
+    Support Devices: support_device
+  ms_cxr:
+    Atelectasis: atelectasis
+    Cardiomegaly: cardiomegaly
+    Consolidation: consolidation
+    Edema: pulmonary_edema
+    Lung Opacity: lung_opacity
+    Pleural Effusion: pleural_effusion
+    Pneumonia: pneumonia
+    Pneumothorax: pneumothorax
+  conns:
+    normal lung transparency: normal_lung_transparency
+    normal cardiac silhouette: normal_cardiac_silhouette
+    normal hilar contour: normal_hilar_contour
+    intact osseous structures: intact_osseous_structures
+    aortic elongation: aortic_elongation
+    cardiomegaly: cardiomegaly
+    nodule: lung_nodule
+    pleural effusion: pleural_effusion
+    scoliosis: scoliosis
+    vertebral degenerative changes: vertebral_degenerative_change
+    hyperinflated lung: hyperinflation
+    vascular hilar enlargement: hilar_vascular_enlargement
+    atelectasis: atelectasis
+    aortic atheromatosis: aortic_atherosclerosis
+    pleural thickening: pleural_thickening
+    interstitial pattern: interstitial_pattern
+    alveolar pattern: alveolar_pattern
+    electrical device: cardiac_electronic_device
+    hemidiaphragm elevation: hemidiaphragm_elevation
+    fracture: fracture
+    hypoexpansion: low_lung_volume
+    central venous catheter: central_venous_catheter
+    hiatal hernia: hiatal_hernia
+    endotracheal tube: endotracheal_tube
+    NSG tube: enteric_tube
+    bronchiectasis: bronchiectasis
+    goiter: goiter
+    osteopenia: osteopenia
+    chronic changes: chronic_lung_change
+    infiltrates: infiltrate
+    fibrotic band: fibrotic_band
+    increased density: increased_density
+    kyphosis: kyphosis
+    consolidation: consolidation
+    pneumothorax: pneumothorax
+    edema: pulmonary_edema
+    lung opacity: lung_opacity
+    pneumonia: pneumonia
+    enlarged cardiomediastinum: enlarged_cardiomediastinum
+    lung lesion: lung_lesion
+    support devices: support_device
+
+# Dataset task families are intentionally separated from the ontology itself.
+dataset_task_mappings:
+  rexvqa:
+    presence_assessment: presence
+    negation_detection: presence
+    location_and_distribution: anatomy
+    differential_diagnosis: finding_identity
+    geometric_reasoning: out_of_scope_primary
+  chest_imagenome:
+    anatomy_scene_graph: anatomy
+    localized_attributes: anatomy
+  radgraph:
+    observation_definitely_present: [present, definite]
+    observation_definitely_absent: [absent, definite]
+    observation_uncertain: [present, possible]

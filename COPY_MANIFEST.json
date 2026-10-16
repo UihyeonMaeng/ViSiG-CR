@@ -1,0 +1,434 @@
+{
+  "program": "ViSiG-CR",
+  "program_version": "2.0.0",
+  "retrieval_implementation_version": "3.2",
+  "retrieval_policy_version": "question_conditioned_contrast_v2",
+  "relation_schema_version": "visig_cr_relation_v2.0",
+  "purpose": "Program copyright registration source reproduction",
+  "prepared_date": "2026-10-12",
+  "original_source_modified": false,
+  "scope": "Core program, preprocessing entry point, local model serving, required configuration and install metadata",
+  "copy_adjustments": [
+    {
+      "path": "config.yaml",
+      "field": "project.version",
+      "before": "2.0",
+      "after": "2.0.0"
+    }
+  ],
+  "generated_documents": [
+    "README.md",
+    "COPY_MANIFEST.json",
+    "SHA256SUMS"
+  ],
+  "excluded": [
+    "comparison_models/",
+    "run_comparisons.py",
+    "comparison_models.yaml",
+    "requirements-motor.txt",
+    "scripts/",
+    "tests/",
+    "examples/",
+    "doc/",
+    "models/",
+    "work/",
+    "run/",
+    "logs/",
+    "__pycache__/",
+    ".pytest_cache/",
+    ".codex/",
+    "research DOCX/XLSX",
+    "datasets, model weights, generated indices, results and credentials"
+  ],
+  "environment": {
+    "python": ">=3.11",
+    "application_dependencies": "requirements.txt unchanged; original ranges retained",
+    "model_serving_reference": "Separate vllm==0.11.0 environment; CUDA/PyTorch hardware dependent",
+    "external_data_and_models_required": true
+  },
+  "verification": {
+    "python_sources_compiled_in_memory": 49,
+    "missing_local_imports": [],
+    "expected_original_files_unchanged": true
+  },
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 3335,
+      "source_sha256": null,
+      "archive_sha256": "65de283eacf69fb967f3732d43e23ae8517f45cfea9e72706cb6f2eb88a1c11a",
+      "status": "generated_deposit_document"
+    },
+    {
+      "path": "config.yaml",
+      "bytes": 25188,
+      "source_sha256": "98a85654e721afbc9b8c4f52542ec174e022164db299a9866df73a08ddf5a0d9",
+      "archive_sha256": "e26f9fca34134d1274fc26062a8285f70c79ec33afecd2716b8a866257b8538d",
+      "status": "version_metadata_only"
+    },
+    {
+      "path": "model.sh",
+      "bytes": 35620,
+      "source_sha256": "518c8d22208f306e9ea923cde78a105b3511654dcdf6ddc1bb16b73ef59a0c05",
+      "archive_sha256": "518c8d22208f306e9ea923cde78a105b3511654dcdf6ddc1bb16b73ef59a0c05",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "ontology.yaml",
+      "bytes": 54427,
+      "source_sha256": "f19da6ffdfec81d77ed6254351dcff38c6c65da75207f840087cc9aef4147dc5",
+      "archive_sha256": "f19da6ffdfec81d77ed6254351dcff38c6c65da75207f840087cc9aef4147dc5",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "prepare_datasets.py",
+      "bytes": 22567,
+      "source_sha256": "2076c48f3ccd7355019b9c0bbfaeac04e58fec28b108182846eb4fcbd2ca2d30",
+      "archive_sha256": "2076c48f3ccd7355019b9c0bbfaeac04e58fec28b108182846eb4fcbd2ca2d30",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "requirements.txt",
+      "bytes": 492,
+      "source_sha256": "5eac3697c3e8d401d3e227b7701ea4b01da7cf4e8d5c2b4e25c55ec9fc1cd093",
+      "archive_sha256": "5eac3697c3e8d401d3e227b7701ea4b01da7cf4e8d5c2b4e25c55ec9fc1cd093",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "run_pipeline.py",
+      "bytes": 75083,
+      "source_sha256": "c0d1bbf6394cfd731c85a3a73c65b1e45740dd72e61a81704e0e8fac755d8198",
+      "archive_sha256": "c0d1bbf6394cfd731c85a3a73c65b1e45740dd72e61a81704e0e8fac755d8198",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "setup.py",
+      "bytes": 558,
+      "source_sha256": "7267aacf5a7087989d601bc322b8d8327a2200a3dba743dad2100a691c1c6974",
+      "archive_sha256": "7267aacf5a7087989d601bc322b8d8327a2200a3dba743dad2100a691c1c6974",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/__init__.py",
+      "bytes": 4881,
+      "source_sha256": "524596c449b041bf166aae16a4838c55adad422a5dc9210ce427ef7351c83c35",
+      "archive_sha256": "524596c449b041bf166aae16a4838c55adad422a5dc9210ce427ef7351c83c35",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/answer_utils.py",
+      "bytes": 9953,
+      "source_sha256": "6a63632d9d3fbf35b735913e0c59a41a39fb4721e8fb020a8d7d5a24bd31a119",
+      "archive_sha256": "6a63632d9d3fbf35b735913e0c59a41a39fb4721e8fb020a8d7d5a24bd31a119",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/clients.py",
+      "bytes": 6382,
+      "source_sha256": "782ca16991444a7081465e95e86585d9aa64709a4a09823b6af4390ff21b8f49",
+      "archive_sha256": "782ca16991444a7081465e95e86585d9aa64709a4a09823b6af4390ff21b8f49",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/clinical_matching.py",
+      "bytes": 8118,
+      "source_sha256": "48a95d704934caab4fe9a26ab7d12d1993983829b0ccadcccc5f0e4f23afd57e",
+      "archive_sha256": "48a95d704934caab4fe9a26ab7d12d1993983829b0ccadcccc5f0e4f23afd57e",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/config.py",
+      "bytes": 3918,
+      "source_sha256": "263bba9ac9a224f39ab53bc5a491ff268823edd7040eb15086faf3b447958b0c",
+      "archive_sha256": "263bba9ac9a224f39ab53bc5a491ff268823edd7040eb15086faf3b447958b0c",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/evaluation.py",
+      "bytes": 40530,
+      "source_sha256": "5cbeef46fe34782e494f841c5ec5b0de2a1fe3398a81663b9a737c2f11d5b208",
+      "archive_sha256": "5cbeef46fe34782e494f841c5ec5b0de2a1fe3398a81663b9a737c2f11d5b208",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/extraction.py",
+      "bytes": 103120,
+      "source_sha256": "c315a98c7cd5a3d0139f99870f4a2636c71b0d819cd834e092b260bab7d02eab",
+      "archive_sha256": "c315a98c7cd5a3d0139f99870f4a2636c71b0d819cd834e092b260bab7d02eab",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/graph/__init__.py",
+      "bytes": 326,
+      "source_sha256": "4c822e44ab238adbdd364f5feb3c38bfcb3696fa25cc74f8b593afe31469030d",
+      "archive_sha256": "4c822e44ab238adbdd364f5feb3c38bfcb3696fa25cc74f8b593afe31469030d",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/graph/relations.py",
+      "bytes": 18441,
+      "source_sha256": "d2ecc53a1131dd54a3a70d031f12053e48e663c290f84ef38cb992731947110e",
+      "archive_sha256": "d2ecc53a1131dd54a3a70d031f12053e48e663c290f84ef38cb992731947110e",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/graph/store.py",
+      "bytes": 41065,
+      "source_sha256": "b447e7af8df56bcf825ff34c37f766070a4fc46189872a028dda5794a7d32692",
+      "archive_sha256": "b447e7af8df56bcf825ff34c37f766070a4fc46189872a028dda5794a7d32692",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/image_utils.py",
+      "bytes": 4460,
+      "source_sha256": "04a4477dca9b59331f624994315b55edfa475b6d4694b4f2e1cbe7405447d90f",
+      "archive_sha256": "04a4477dca9b59331f624994315b55edfa475b6d4694b4f2e1cbe7405447d90f",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/io_utils.py",
+      "bytes": 3784,
+      "source_sha256": "a5bf504b1b89f3c06d6ced8160fab01c25a6cac8a518b2996467814efa04952f",
+      "archive_sha256": "a5bf504b1b89f3c06d6ced8160fab01c25a6cac8a518b2996467814efa04952f",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/mimic.py",
+      "bytes": 5332,
+      "source_sha256": "a622d88efbe30aff40a96aeb0111253f1d4ecf1ff4b9448b3be2b58035f278dd",
+      "archive_sha256": "a622d88efbe30aff40a96aeb0111253f1d4ecf1ff4b9448b3be2b58035f278dd",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/no_rag.py",
+      "bytes": 4233,
+      "source_sha256": "3bf7c813bc000a767400b9fc36abf33f52bae1156fe14b8a56d85078d24c0a6b",
+      "archive_sha256": "3bf7c813bc000a767400b9fc36abf33f52bae1156fe14b8a56d85078d24c0a6b",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/normality.py",
+      "bytes": 9572,
+      "source_sha256": "e06e31f9566c34e6f7e93a01e5848c98702e975200e9d4159eb4ee1093da4db5",
+      "archive_sha256": "e06e31f9566c34e6f7e93a01e5848c98702e975200e9d4159eb4ee1093da4db5",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/ontology.py",
+      "bytes": 36647,
+      "source_sha256": "8a30ecc20948f496669bd5d1cf34e1a0fb748c2d0bbb15cc32b2659e3ee70832",
+      "archive_sha256": "8a30ecc20948f496669bd5d1cf34e1a0fb748c2d0bbb15cc32b2659e3ee70832",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/preprocessing/__init__.py",
+      "bytes": 1493,
+      "source_sha256": "cd9308f05aea10a1c70879678080d29b4b85f6cd5350d94eab81613e3fdb85c8",
+      "archive_sha256": "cd9308f05aea10a1c70879678080d29b4b85f6cd5350d94eab81613e3fdb85c8",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/preprocessing/__main__.py",
+      "bytes": 78,
+      "source_sha256": "2cf719c0f33323493e2f10551324a32401f5f858346aaccf73803607d234ff09",
+      "archive_sha256": "2cf719c0f33323493e2f10551324a32401f5f858346aaccf73803607d234ff09",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/preprocessing/closed_set_vqa.py",
+      "bytes": 40706,
+      "source_sha256": "6778d1a4ec692f48897f35b25865c9afb974531ce0f36cf6c6982acec62acc5e",
+      "archive_sha256": "6778d1a4ec692f48897f35b25865c9afb974531ce0f36cf6c6982acec62acc5e",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/preprocessing/common.py",
+      "bytes": 15417,
+      "source_sha256": "43e486cb857e0bb777434c2c30957de60aa3d12d635dfecb588085d3a51a9739",
+      "archive_sha256": "43e486cb857e0bb777434c2c30957de60aa3d12d635dfecb588085d3a51a9739",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/preprocessing/mimic_roles.py",
+      "bytes": 11364,
+      "source_sha256": "09729931dcc50bdfd65faa2a8b29d1378204995f826209eb8d4f3b550f7b4004",
+      "archive_sha256": "09729931dcc50bdfd65faa2a8b29d1378204995f826209eb8d4f3b550f7b4004",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/preprocessing/mimic_vqa.py",
+      "bytes": 26429,
+      "source_sha256": "b5ae125d8bcc3df7d55472c05135ff4453ea9a6978da56cfeec08af48d74e58a",
+      "archive_sha256": "b5ae125d8bcc3df7d55472c05135ff4453ea9a6978da56cfeec08af48d74e58a",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/preprocessing/physionet.py",
+      "bytes": 33321,
+      "source_sha256": "a23b2cd07162fdaba8a5b5b5593d6b855eb32b5c6c15cba395e7074a5276674b",
+      "archive_sha256": "a23b2cd07162fdaba8a5b5b5593d6b855eb32b5c6c15cba395e7074a5276674b",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/preprocessing/prepare_rex_datasets.py",
+      "bytes": 11670,
+      "source_sha256": "234d4cb1149e6e0cd8948db1e6a824c925abe90c87b0fdef6c05a8e83cee23b2",
+      "archive_sha256": "234d4cb1149e6e0cd8948db1e6a824c925abe90c87b0fdef6c05a8e83cee23b2",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/preprocessing/rad_restruct.py",
+      "bytes": 12089,
+      "source_sha256": "009ffc4656ca904dc17ca1bad1014f693f371920f59797c97451dd8a63d38731",
+      "archive_sha256": "009ffc4656ca904dc17ca1bad1014f693f371920f59797c97451dd8a63d38731",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/preprocessing/rexgradient.py",
+      "bytes": 26715,
+      "source_sha256": "48042ffded84e2690fd9c81435353dd7e7356ec51392a6d42e7e2213ab4c7ebb",
+      "archive_sha256": "48042ffded84e2690fd9c81435353dd7e7356ec51392a6d42e7e2213ab4c7ebb",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/preprocessing/rexvqa.py",
+      "bytes": 25054,
+      "source_sha256": "648911c31c29b67cfa9520203b02180f8441b64a1a418449bbe012497e2f6ea0",
+      "archive_sha256": "648911c31c29b67cfa9520203b02180f8441b64a1a418449bbe012497e2f6ea0",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/preprocessing/vindr_cxr.py",
+      "bytes": 9471,
+      "source_sha256": "e457ac7c05bf2c826ea645811e6abf6c6b7022831a113703ba2e699cbfc366d9",
+      "archive_sha256": "e457ac7c05bf2c826ea645811e6abf6c6b7022831a113703ba2e699cbfc366d9",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/preprocessing/vindr_cxr_vqa.py",
+      "bytes": 23797,
+      "source_sha256": "5065dbe5025f20753e5e0b0415f8c7051255bd32fd75baa2ff424dc0b71b2992",
+      "archive_sha256": "5065dbe5025f20753e5e0b0415f8c7051255bd32fd75baa2ff424dc0b71b2992",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/preprocessing/vqa_common.py",
+      "bytes": 11044,
+      "source_sha256": "795b438c042f1ad37626053aef9322ac91e8b1e4e71781cebfa711d8c01c8b4e",
+      "archive_sha256": "795b438c042f1ad37626053aef9322ac91e8b1e4e71781cebfa711d8c01c8b4e",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/presence_index.py",
+      "bytes": 14659,
+      "source_sha256": "61ee25e4c717281b272d9276242de058175141a922a0fc304b3bae12c14699a4",
+      "archive_sha256": "61ee25e4c717281b272d9276242de058175141a922a0fc304b3bae12c14699a4",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/prompts.py",
+      "bytes": 16600,
+      "source_sha256": "1fd7e685d88efc41613614828a49f55b05d4b12b126acb04eb3582bf22cd7036",
+      "archive_sha256": "1fd7e685d88efc41613614828a49f55b05d4b12b126acb04eb3582bf22cd7036",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/protocol.py",
+      "bytes": 6795,
+      "source_sha256": "faafa8e5b1d55ab4d9ad62e53dd406df36ca5cec36d79b9aa8013ebed4dac647",
+      "archive_sha256": "faafa8e5b1d55ab4d9ad62e53dd406df36ca5cec36d79b9aa8013ebed4dac647",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/reader/__init__.py",
+      "bytes": 643,
+      "source_sha256": "8c18e5319614bf9c782d5244d29b25284cff14535322eb8325332385b360c17c",
+      "archive_sha256": "8c18e5319614bf9c782d5244d29b25284cff14535322eb8325332385b360c17c",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/reader_core.py",
+      "bytes": 78254,
+      "source_sha256": "3359f2f798d8d25994c600d0194be9557ef389751c275876a5d0cbe4bef137f1",
+      "archive_sha256": "3359f2f798d8d25994c600d0194be9557ef389751c275876a5d0cbe4bef137f1",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/retrieval/__init__.py",
+      "bytes": 896,
+      "source_sha256": "27bbd717962f78730393238ebb6dcfd561c106022d5cfebf616a912fef4fef32",
+      "archive_sha256": "27bbd717962f78730393238ebb6dcfd561c106022d5cfebf616a912fef4fef32",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/retrieval/attribute_selector.py",
+      "bytes": 59184,
+      "source_sha256": "5e6826352f845042ed7f365935de23aea7e847625e22e6064ffabab7e474ec38",
+      "archive_sha256": "5e6826352f845042ed7f365935de23aea7e847625e22e6064ffabab7e474ec38",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/retrieval/comparison.py",
+      "bytes": 476,
+      "source_sha256": "cf4e9e124eaf88a850e135726a2457d20839ab9ebd8d3a61e50038830d6cd85e",
+      "archive_sha256": "cf4e9e124eaf88a850e135726a2457d20839ab9ebd8d3a61e50038830d6cd85e",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/retrieval/engine.py",
+      "bytes": 100297,
+      "source_sha256": "1b962faa5d89b84bef9f209c2a36ddcbf8b7a289c0df323526438462b884ee1e",
+      "archive_sha256": "1b962faa5d89b84bef9f209c2a36ddcbf8b7a289c0df323526438462b884ee1e",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/retrieval/question_conditioned.py",
+      "bytes": 26914,
+      "source_sha256": "e0e564fd40c77d51b3c40600627040daaa5e74088fef2afbcda9159b483c8a6b",
+      "archive_sha256": "e0e564fd40c77d51b3c40600627040daaa5e74088fef2afbcda9159b483c8a6b",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/retrieval/relation_router.py",
+      "bytes": 8850,
+      "source_sha256": "12a74dc60a399982c5989c8f69854a9accace16911654cedb6394f43c39866b6",
+      "archive_sha256": "12a74dc60a399982c5989c8f69854a9accace16911654cedb6394f43c39866b6",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/retrieval_evaluation.py",
+      "bytes": 23435,
+      "source_sha256": "8a39b5df103c58ccd58afe141d18d58cf09de9f9b14700123cb64fa74cbb6c09",
+      "archive_sha256": "8a39b5df103c58ccd58afe141d18d58cf09de9f9b14700123cb64fa74cbb6c09",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/schemas.py",
+      "bytes": 25058,
+      "source_sha256": "bea7123265a96bfbdcdd2054f7bf9fc19b4f718b0d9c05136bdd97ba9537887b",
+      "archive_sha256": "bea7123265a96bfbdcdd2054f7bf9fc19b4f718b0d9c05136bdd97ba9537887b",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/selftest.py",
+      "bytes": 8949,
+      "source_sha256": "3e2a15b90216aad249d6dfe983b97620dc497f4c42fcc470f6b191f4b928bb54",
+      "archive_sha256": "3e2a15b90216aad249d6dfe983b97620dc497f4c42fcc470f6b191f4b928bb54",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/version.py",
+      "bytes": 154,
+      "source_sha256": "71332e753c84c5be76f4ce846a0be6e63daef6aa510a77d31bb9fe758e0c2845",
+      "archive_sha256": "71332e753c84c5be76f4ce846a0be6e63daef6aa510a77d31bb9fe758e0c2845",
+      "status": "byte_identical_to_source"
+    },
+    {
+      "path": "visig_cr/visual.py",
+      "bytes": 8762,
+      "source_sha256": "e1f0554a63705c31320adb255f52712c499f5338b0447b346ce13c87f79e4804",
+      "archive_sha256": "e1f0554a63705c31320adb255f52712c499f5338b0447b346ce13c87f79e4804",
+      "status": "byte_identical_to_source"
+    }
+  ]
+}
